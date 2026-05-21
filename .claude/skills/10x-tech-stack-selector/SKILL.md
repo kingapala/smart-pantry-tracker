@@ -42,7 +42,7 @@ The starter registry in `references/starter-registry.yaml` is the **single sourc
 
 ## Required inputs
 
-1. A PRD file — exists, is readable, conforms to the PRD schema (`packages/ai-artifacts/skills/10x-shape/references/prd-schema.md`). Default location: `context/foundation/prd.md`. The user MAY pass a different path as the argument (see "Initial Response" below). The skill reads the **frontmatter** as priors (`product_type`, `target_scale`, `timeline_budget`, `project`) and may read body sections (`## Functional Requirements`, `## Non-Goals`) for the feature audit and to detect Socratic moments where the PRD's FRs surface a feature the recommended starter does not include.
+1. A PRD file — exists, is readable, conforms to the PRD schema (`/skills/10x-shape/references/prd-schema.md`). Default location: `context/foundation/prd.md`. The user MAY pass a different path as the argument (see "Initial Response" below). The skill reads the **frontmatter** as priors (`product_type`, `target_scale`, `timeline_budget`, `project`) and may read body sections (`## Functional Requirements`, `## Non-Goals`) for the feature audit and to detect Socratic moments where the PRD's FRs surface a feature the recommended starter does not include.
 2. `references/starter-registry.yaml` — bundled with the skill. Loaded at decision time.
 3. `references/residual-interview.md` — bundled. Loaded at interview time.
 4. `references/handoff-schema.md` — bundled. Loaded at write time.

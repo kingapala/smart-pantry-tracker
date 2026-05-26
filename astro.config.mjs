@@ -13,7 +13,9 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
   },
-  adapter: cloudflare(),
+  // imageService: 'compile' overrides the Astro 6 default ('cloudflare-binding'),
+  // which requires a Cloudflare Images binding that is not configured for this project.
+  adapter: cloudflare({ imageService: "compile" }),
   env: {
     schema: {
       SUPABASE_URL: envField.string({ context: "server", access: "secret", optional: true }),

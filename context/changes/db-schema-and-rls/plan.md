@@ -242,23 +242,23 @@ None for this slice — the migration is a schema change with no application cod
 
 #### Automated
 
-- [x] 2.1 File exists at `supabase/seed.sql`
+- [x] 2.1 File exists at `supabase/seed.sql` — 7343a52
 
 #### Manual
 
-- [x] 2.2 5 rows covering all shopping list states (below-threshold, above-threshold, expired, zero-qty, add_to_list=false)
-- [x] 2.3 Comment explains user_id replacement step and `supabase db reset` command
-- [x] 2.4 No hard-coded absolute dates — expiry uses `current_date` offsets
+- [x] 2.2 5 rows covering all shopping list states (below-threshold, above-threshold, expired, zero-qty, add_to_list=false) — 7343a52
+- [x] 2.3 Comment explains user_id replacement step and `supabase db reset` command — 7343a52
+- [x] 2.4 No hard-coded absolute dates — expiry uses `current_date` offsets — 7343a52
 
 ### Phase 3: Link Project + Apply Migration
 
 #### Automated
 
-- [ ] 3.1 `supabase db push` exits with code 0
+- [x] 3.1 `supabase db push` exits with code 0
 
 #### Manual
 
-- [ ] 3.2 `products` table visible in dashboard Table Editor with all 9 columns
-- [ ] 3.3 4 RLS policies listed in dashboard Authentication → Policies
-- [ ] 3.4 RLS isolation verified: test row inserted, SET ROLE anon returns 0 rows in SQL Editor
-- [ ] 3.5 `add_to_list` default and `CHECK` constraints confirmed in dashboard
+- [x] 3.2 `products` table visible in dashboard Table Editor with all 9 columns
+- [x] 3.3 4 RLS policies listed in dashboard Authentication → Policies
+- [x] 3.4 RLS isolation verified: test row inserted, SET ROLE anon returns 0 rows in SQL Editor
+- [x] 3.5 `add_to_list` default and `CHECK` constraints confirmed in dashboard

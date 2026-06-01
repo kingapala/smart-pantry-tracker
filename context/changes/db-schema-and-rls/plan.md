@@ -229,26 +229,26 @@ None for this slice — the migration is a schema change with no application cod
 
 #### Automated
 
-- [x] 1.1 Migration file exists at `supabase/migrations/20260528000000_products_schema.sql`
-- [x] 1.2 `supabase db lint` exits with no errors (if CLI available)
+- [x] 1.1 Migration file exists at `supabase/migrations/20260528000000_products_schema.sql` — 265dbc3
+- [x] 1.2 `supabase db lint` exits with no errors (if CLI available) — 265dbc3
 
 #### Manual
 
-- [x] 1.3 All 9 columns present with correct types and constraints
-- [x] 1.4 4 RLS policies present (select, insert, update, delete)
-- [x] 1.5 `add_to_list` defaults to `true`; `quantity`/`min_threshold` default to `0`
+- [x] 1.3 All 9 columns present with correct types and constraints — 265dbc3
+- [x] 1.4 4 RLS policies present (select, insert, update, delete) — 265dbc3
+- [x] 1.5 `add_to_list` defaults to `true`; `quantity`/`min_threshold` default to `0` — 265dbc3
 
 ### Phase 2: Seed File
 
 #### Automated
 
-- [ ] 2.1 File exists at `supabase/seed.sql`
+- [x] 2.1 File exists at `supabase/seed.sql`
 
 #### Manual
 
-- [ ] 2.2 5 rows covering all shopping list states (below-threshold, above-threshold, expired, zero-qty, add_to_list=false)
-- [ ] 2.3 Comment explains user_id replacement step and `supabase db reset` command
-- [ ] 2.4 No hard-coded absolute dates — expiry uses `current_date` offsets
+- [x] 2.2 5 rows covering all shopping list states (below-threshold, above-threshold, expired, zero-qty, add_to_list=false)
+- [x] 2.3 Comment explains user_id replacement step and `supabase db reset` command
+- [x] 2.4 No hard-coded absolute dates — expiry uses `current_date` offsets
 
 ### Phase 3: Link Project + Apply Migration
 

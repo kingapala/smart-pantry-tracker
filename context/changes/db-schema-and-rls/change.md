@@ -2,7 +2,7 @@
 id: db-schema-and-rls
 roadmap_id: F-01
 title: "Database schema + RLS"
-status: implementing
+status: implemented
 created: 2026-05-28
 updated: 2026-06-01
 ---

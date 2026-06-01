@@ -254,11 +254,11 @@ None for this slice — the migration is a schema change with no application cod
 
 #### Automated
 
-- [x] 3.1 `supabase db push` exits with code 0
+- [x] 3.1 `supabase db push` exits with code 0 — 1158b6b
 
 #### Manual
 
-- [x] 3.2 `products` table visible in dashboard Table Editor with all 9 columns
-- [x] 3.3 4 RLS policies listed in dashboard Authentication → Policies
-- [x] 3.4 RLS isolation verified: test row inserted, SET ROLE anon returns 0 rows in SQL Editor
-- [x] 3.5 `add_to_list` default and `CHECK` constraints confirmed in dashboard
+- [x] 3.2 `products` table visible in dashboard Table Editor with all 9 columns — 1158b6b
+- [x] 3.3 4 RLS policies listed in dashboard Authentication → Policies — 1158b6b
+- [x] 3.4 RLS isolation verified: test row inserted, SET ROLE anon returns 0 rows in SQL Editor — 1158b6b
+- [x] 3.5 `add_to_list` default and `CHECK` constraints confirmed in dashboard — 1158b6b

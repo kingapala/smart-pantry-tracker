@@ -24,7 +24,7 @@ export function formatDate(date: Date | string): string {
 export function formatDateDisplay(
   date: Date | string,
   locale = "pl-PL",
-  options: Intl.DateTimeFormatOptions = {}
+  options: Intl.DateTimeFormatOptions = {},
 ): string {
   const d = typeof date === "string" ? new Date(date) : date;
   return new Intl.DateTimeFormat(locale, {

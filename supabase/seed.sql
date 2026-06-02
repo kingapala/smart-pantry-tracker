@@ -21,4 +21,7 @@ insert into public.products (user_id, name, quantity, unit, expiry_date, min_thr
   ('00000000-0000-0000-0000-000000000000', 'Eggs',      0.00,   'pcs', null,                  6.00,   true),
 
   -- 5. Above threshold + add_to_list=false → excluded from shopping list regardless of quantity
-  ('00000000-0000-0000-0000-000000000000', 'Olive Oil', 0.80,   'l',   current_date + 180,    0.50,   false);
+  ('00000000-0000-0000-0000-000000000000', 'Olive Oil', 0.80,   'l',   current_date + 180,    0.50,   false),
+
+  -- 6. Below threshold + add_to_list=false → add_to_list is the hard gate, excluded even when stock is critically low
+  ('00000000-0000-0000-0000-000000000000', 'Salt',      0.00,   'g',   null,                  200.00, false);

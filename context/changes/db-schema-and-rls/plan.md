@@ -261,26 +261,26 @@ Add the inventory list page, add form page, edit form page, and the delete confi
 
 #### Manual
 
-- [ ] 2.3 POST creates product and redirects to `/inventory`
-- [ ] 2.4 PUT updates all fields and redirects to `/inventory`
-- [ ] 2.5 DELETE removes product and redirects to `/inventory`
+- [x] 2.3 POST creates product and redirects to `/inventory`
+- [x] 2.4 PUT updates all fields and redirects to `/inventory`
+- [x] 2.5 DELETE removes product and redirects to `/inventory`
 - [ ] 2.6 Cross-user PUT/DELETE produces no change
-- [ ] 2.7 Missing required field shows `?error=` on form page
+- [x] 2.7 Missing required field shows `?error=` on form page
 
 ### Phase 3: Inventory UI
 
 #### Automated
 
-- [x] 3.1 Type checking passes: `npx astro check`
-- [x] 3.2 Lint passes: `npm run lint`
-- [x] 3.3 Build succeeds: `npm run build`
+- [x] 3.1 Type checking passes: `npx astro check` — 8ba43cb
+- [x] 3.2 Lint passes: `npm run lint` — 8ba43cb
+- [x] 3.3 Build succeeds: `npm run build` — 8ba43cb
 
 #### Manual
 
-- [ ] 3.4 Unauthenticated visit to `/inventory` redirects to `/auth/signin`
-- [ ] 3.5 Empty state shown; added product appears in list
-- [ ] 3.6 Edit form pre-populates correctly; save updates product
-- [ ] 3.7 Delete dialog shows product name; Cancel closes; Confirm deletes
-- [ ] 3.8 Keyboard navigation works end-to-end (Tab, Enter, Escape)
-- [ ] 3.9 Error messages display on failed operations
-- [ ] 3.10 No regressions on auth pages or dashboard
+- [x] 3.4 Unauthenticated visit to `/inventory` redirects to `/auth/signin`
+- [x] 3.5 Empty state shown; added product appears in list
+- [x] 3.6 Edit form pre-populates correctly; save updates product
+- [x] 3.7 Delete dialog shows product name; Cancel closes; Confirm deletes
+- [x] 3.8 Keyboard navigation works end-to-end (Tab, Enter, Escape)
+- [x] 3.9 Error messages display on failed operations
+- [x] 3.10 No regressions on auth pages or dashboard

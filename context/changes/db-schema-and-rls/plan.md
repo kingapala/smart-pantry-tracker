@@ -256,8 +256,8 @@ Add the inventory list page, add form page, edit form page, and the delete confi
 
 #### Automated
 
-- [x] 2.1 Type checking passes: `npx astro check`
-- [x] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 Type checking passes: `npx astro check` — 38bc9b6
+- [x] 2.2 Lint passes: `npm run lint` — 38bc9b6
 
 #### Manual
 
@@ -271,9 +271,9 @@ Add the inventory list page, add form page, edit form page, and the delete confi
 
 #### Automated
 
-- [ ] 3.1 Type checking passes: `npx astro check`
-- [ ] 3.2 Lint passes: `npm run lint`
-- [ ] 3.3 Build succeeds: `npm run build`
+- [x] 3.1 Type checking passes: `npx astro check`
+- [x] 3.2 Lint passes: `npm run lint`
+- [x] 3.3 Build succeeds: `npm run build`
 
 #### Manual
 

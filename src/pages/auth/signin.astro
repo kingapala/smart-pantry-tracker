@@ -2,6 +2,10 @@
 import Layout from "@/layouts/Layout.astro";
 import SignInForm from "@/components/auth/SignInForm";
 
+if (Astro.locals.user) {
+  return new Response(null, { status: 302, headers: { Location: "/inventory" } });
+}
+
 const error = Astro.url.searchParams.get("error");
 ---
 

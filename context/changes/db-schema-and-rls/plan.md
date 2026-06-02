@@ -261,11 +261,11 @@ Add the inventory list page, add form page, edit form page, and the delete confi
 
 #### Manual
 
-- [x] 2.3 POST creates product and redirects to `/inventory`
-- [x] 2.4 PUT updates all fields and redirects to `/inventory`
-- [x] 2.5 DELETE removes product and redirects to `/inventory`
+- [x] 2.3 POST creates product and redirects to `/inventory` — 960c08a
+- [x] 2.4 PUT updates all fields and redirects to `/inventory` — 960c08a
+- [x] 2.5 DELETE removes product and redirects to `/inventory` — 960c08a
 - [ ] 2.6 Cross-user PUT/DELETE produces no change
-- [x] 2.7 Missing required field shows `?error=` on form page
+- [x] 2.7 Missing required field shows `?error=` on form page — 960c08a
 
 ### Phase 3: Inventory UI
 
@@ -277,10 +277,10 @@ Add the inventory list page, add form page, edit form page, and the delete confi
 
 #### Manual
 
-- [x] 3.4 Unauthenticated visit to `/inventory` redirects to `/auth/signin`
-- [x] 3.5 Empty state shown; added product appears in list
-- [x] 3.6 Edit form pre-populates correctly; save updates product
-- [x] 3.7 Delete dialog shows product name; Cancel closes; Confirm deletes
-- [x] 3.8 Keyboard navigation works end-to-end (Tab, Enter, Escape)
-- [x] 3.9 Error messages display on failed operations
-- [x] 3.10 No regressions on auth pages or dashboard
+- [x] 3.4 Unauthenticated visit to `/inventory` redirects to `/auth/signin` — 960c08a
+- [x] 3.5 Empty state shown; added product appears in list — 960c08a
+- [x] 3.6 Edit form pre-populates correctly; save updates product — 960c08a
+- [x] 3.7 Delete dialog shows product name; Cancel closes; Confirm deletes — 960c08a
+- [x] 3.8 Keyboard navigation works end-to-end (Tab, Enter, Escape) — 960c08a
+- [x] 3.9 Error messages display on failed operations — 960c08a
+- [x] 3.10 No regressions on auth pages or dashboard — 960c08a

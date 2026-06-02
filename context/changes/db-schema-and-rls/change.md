@@ -1,7 +1,7 @@
 ---
 change_id: db-schema-and-rls
 title: Database schema and RLS foundation (F-01)
-status: implementing
+status: implemented
 created: 2026-06-02
 updated: 2026-06-02
 archived_at: null

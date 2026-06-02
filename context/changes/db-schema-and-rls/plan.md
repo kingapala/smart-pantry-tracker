@@ -244,7 +244,7 @@ Add the inventory list page, add form page, edit form page, and the delete confi
 #### Automated
 
 - [ ] 1.1 Migrations apply cleanly: `npx supabase db reset` exits 0
-- [x] 1.2 Lint passes: `npm run lint`
+- [x] 1.2 Lint passes: `npm run lint` — c397500
 
 #### Manual
 
@@ -256,8 +256,8 @@ Add the inventory list page, add form page, edit form page, and the delete confi
 
 #### Automated
 
-- [ ] 2.1 Type checking passes: `npx astro check`
-- [ ] 2.2 Lint passes: `npm run lint`
+- [x] 2.1 Type checking passes: `npx astro check`
+- [x] 2.2 Lint passes: `npm run lint`
 
 #### Manual
 

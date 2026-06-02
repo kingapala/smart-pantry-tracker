@@ -3,7 +3,7 @@ project: "Smart Pantry Tracker"
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-05-26
+updated: 2026-06-02
 prd_version: 1
 main_goal: speed
 top_blocker: capacity
@@ -29,9 +29,9 @@ Smart Pantry Tracker addresses a structural problem: every existing tracking mec
 
 | ID   | Change ID                  | Outcome (user can …)                                                                     | Prerequisites | PRD refs                                      | Status   |
 | ---- | -------------------------- | ---------------------------------------------------------------------------------------- | ------------- | --------------------------------------------- | -------- |
-| F-01 | db-schema-and-rls          | (foundation) Product schema migrated; RLS policies enforce per-user isolation            | —             | Access Control, NFR: data isolation           | ready    |
+| F-01 | db-schema-and-rls          | (foundation) Product schema migrated; RLS policies enforce per-user isolation            | —             | Access Control, NFR: data isolation           | done     |
 | S-01 | auth-completion            | sign out and request a password reset via email                                          | —             | FR-001, FR-002, FR-003, FR-013                | ready    |
-| S-02 | inventory-crud             | add, view, edit, and delete products in their inventory                                  | F-01          | FR-004, FR-005, FR-006, FR-007, US-01         | proposed |
+| S-02 | inventory-crud             | add, view, edit, and delete products in their inventory through a web interface          | F-01          | FR-004–FR-007, US-01, NFR: UI feedback + a11y | ready    |
 | S-04 | shopping-list-core         | view the auto-generated shopping list; list updates when qty drops below threshold       | F-01, S-02    | FR-010, FR-011, US-01                         | proposed |
 | S-03 | inventory-expiry-and-sort  | see expired products highlighted in red and sort inventory by expiry date                | S-02          | FR-008, FR-009                                | proposed |
 | S-05 | shopping-list-complete     | check off a shopping list item with qty purchased and manually add one-off items         | S-04          | FR-012, FR-014                                | proposed |
@@ -40,20 +40,20 @@ Smart Pantry Tracker addresses a structural problem: every existing tracking mec
 
 Navigation aid — groups items that share a Prerequisites chain. Canonical ordering still lives in the dependency graph below; this table is the proposed reading order across parallel tracks.
 
-| Stream | Theme             | Chain                                                                              | Note                                                                                          |
-| ------ | ----------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
-| A      | Closed loop core  | `F-01` → `S-02` → `S-04` → `S-05` (with `S-03` parallel with `S-04` after `S-02`) | Critical path to the north star; `speed` goal — reach `S-04` without detours.               |
-| B      | Auth completion   | `S-01`                                                                             | Standalone; no prerequisites; run in parallel with `F-01` to close all auth must-haves early. |
+| Stream | Theme | Chain | Note |
+| --- | --- | --- | --- |
+| A | Closed loop core | `F-01` → `S-02` → `S-04` → `S-05` (with `S-03` parallel with `S-04` after `S-02`) | Critical path to the north star; `speed` goal — reach `S-04` without detours. |
+| B | Auth completion | `S-01` | Standalone; no prerequisites; run in parallel with Stream A; closes all auth must-haves. |
 
 ## Baseline
 
-What's already in place in the codebase as of 2026-05-26 (auto-researched + user-confirmed).
+What's already in place in the codebase as of 2026-06-02 (auto-researched + user-confirmed).
 Foundations below assume these are present and do NOT re-scaffold them.
 
 - **Frontend:** present — Astro + React configured (`astro.config.mjs`); components in `src/components/`; page routing in `src/pages/`
 - **Backend / API:** present — Astro SSR `output: "server"` + Cloudflare adapter; API routes at `src/pages/api/auth/`; middleware at `src/middleware.ts`
-- **Data:** partial — Supabase client at `src/lib/supabase.ts`; no schema files or migrations yet (`supabase/` contains only `config.toml`)
-- **Auth:** present — Supabase Auth wired: `signUp`, `signInWithPassword`, `getUser()` in middleware; `/dashboard` protected
+- **Data:** present — Supabase client at `src/lib/supabase.ts`; products schema + RLS at `supabase/migrations/20260528000000_products_schema.sql`; index migration at `supabase/migrations/20260602000000_products_add_to_list_index.sql`
+- **Auth:** partial — Supabase Auth wired: `signUp`, `signInWithPassword`, `signOut` present (`src/pages/api/auth/signout.ts` + dashboard button); `/dashboard` protected; password reset (FR-013) not yet implemented
 - **Deploy / infra:** present — `.github/workflows/ci.yml` + `wrangler.jsonc` (Cloudflare Pages / Workers)
 - **Observability:** absent — no logging library, no error tracking, no metrics
 
@@ -70,7 +70,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** All 10 inventory and shopping list FRs (FR-004–FR-009, FR-010–FR-012, FR-014) fail without this foundation; sequenced first as the fastest path to unblocking S-02 and the north star S-04. Schema errors — missing columns, wrong types, incomplete RLS policies — require a migration re-run and possible data loss if caught after data has been written.
-- **Status:** ready
+- **Status:** done
 
 ## Slices
 
@@ -78,9 +78,9 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 - **Outcome:** User can sign out and request a password reset via email.
 - **Change ID:** auth-completion
-- **PRD refs:** FR-001 (sign-up — already present in baseline), FR-002 (sign-in — already present in baseline), FR-003 (sign-out), FR-013 (password reset)
-- **Prerequisites:** — (sign-up and sign-in already wired in baseline; this slice adds the missing must-have auth flows)
-- **Parallel with:** F-01
+- **PRD refs:** FR-001 (sign-up — in baseline), FR-002 (sign-in — in baseline), FR-003 (sign-out — in baseline; `signout.ts` + dashboard button already wired), FR-013 (password reset — remaining work for this slice)
+- **Prerequisites:** —
+- **Parallel with:** S-02
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** FR-013 (password reset) relies on Supabase email delivery; hosted Supabase defaults work out of the box, but the reset-link callback route must be implemented in Astro to complete the flow. Without it, accounts are permanently inaccessible on password loss — a must-have gap, not a nice-to-have.
@@ -90,15 +90,15 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 ### S-02: Inventory CRUD
 
-- **Outcome:** User can add, view, edit, and delete products in their inventory.
+- **Outcome:** User can add, view, edit, and delete products in their inventory through a web interface (list view, add form, edit form, delete confirmation).
 - **Change ID:** inventory-crud
-- **PRD refs:** FR-004 (add product), FR-005 (view list), FR-006 (update any field), FR-007 (delete with confirmation), US-01 (add + update quantity steps)
+- **PRD refs:** FR-004 (add product), FR-005 (view list), FR-006 (update any field), FR-007 (delete with confirmation), US-01 (add + update quantity steps), NFR: visible feedback within 2 seconds, NFR: keyboard-navigable core flows with WCAG 2.1 AA labels
 - **Prerequisites:** F-01
-- **Parallel with:** —
+- **Parallel with:** S-01
 - **Blockers:** —
 - **Unknowns:** —
-- **Risk:** FR-006 specifies "update any field" as a full edit form — the PRD explicitly deferred an inline quantity stepper to v2. Pressure to improve UX here conflicts with the `speed` goal; keep the edit form as-is per PRD decision.
-- **Status:** proposed
+- **Risk:** This slice is end-to-end: data queries, API routes, and the full inventory UI (list page, add/edit forms, delete confirmation dialog). FR-006 specifies "update any field" as a full edit form — the PRD explicitly deferred an inline quantity stepper to v2. Pressure to improve UX conflicts with the `speed` goal; keep the edit form as-is per PRD decision.
+- **Status:** ready
 
 ---
 
@@ -144,14 +144,14 @@ Foundations below assume these are present and do NOT re-scaffold them.
 
 ## Backlog Handoff
 
-| Roadmap ID | Change ID                  | Suggested issue title                                    | Ready for `/10x-plan` | Notes                              |
-| ---------- | -------------------------- | -------------------------------------------------------- | --------------------- | ---------------------------------- |
-| F-01       | db-schema-and-rls          | Define Supabase product schema + RLS policies            | yes                   | Run `/10x-plan db-schema-and-rls`  |
-| S-01       | auth-completion            | Complete auth: sign-out + password reset flow            | yes                   | Run `/10x-plan auth-completion`    |
-| S-02       | inventory-crud             | Inventory CRUD: add, view, edit, delete products         | no                    | Needs F-01 first                   |
-| S-04       | shopping-list-core         | Shopping list: auto-derived from inventory state         | no                    | Needs F-01 + S-02 first            |
-| S-03       | inventory-expiry-and-sort  | Expiry highlighting + session-persistent sort-by-expiry  | no                    | Needs S-02 first                   |
-| S-05       | shopping-list-complete     | Shopping list: check-off with qty + manual items         | no                    | Needs S-04 first                   |
+| Roadmap ID | Change ID | Suggested issue title | Ready for `/10x-plan` | Notes |
+| --- | --- | --- | --- | --- |
+| F-01 | db-schema-and-rls | Define Supabase product schema + RLS policies | done | Implemented + impl-reviewed; run `/10x-archive db-schema-and-rls` to close the loop |
+| S-01 | auth-completion | Complete auth: password reset flow | yes | Sign-out already in baseline; remaining work is FR-013. Run `/10x-plan auth-completion` |
+| S-02 | inventory-crud | Inventory CRUD: add, view, edit, delete products | yes | F-01 done; run `/10x-plan inventory-crud` |
+| S-04 | shopping-list-core | Shopping list: auto-derived from inventory state | no | Needs S-02 first |
+| S-03 | inventory-expiry-and-sort | Expiry highlighting + session-persistent sort-by-expiry | no | Needs S-02 first |
+| S-05 | shopping-list-complete | Shopping list: check-off with qty + manual items | no | Needs S-04 first |
 
 ## Open Roadmap Questions
 
@@ -166,4 +166,4 @@ None. All PRD questions were resolved inline during the shaping and Socrates rou
 
 ## Done
 
-(Empty on first generation. `/10x-archive` appends an entry here — and flips that item's `Status` to `done` — when a change whose `Change ID` matches the item is archived.)
+- **F-01: Database schema + RLS** — Implemented 2026-06-02; `context/changes/db-schema-and-rls/` (status: `impl_reviewed`). Not yet formally archived — run `/10x-archive db-schema-and-rls` to close the loop. Lessons: null-check `createClient()`; always use `formatDate()`/`nowUTC()` (see `context/foundation/lessons.md`).

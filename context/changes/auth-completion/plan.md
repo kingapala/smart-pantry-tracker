@@ -264,29 +264,29 @@ Also verify that the Supabase project's "Site URL" (Authentication → URL Confi
 
 #### Automated
 
-- [x] 1.1 `npm run lint` passes across all new and modified Phase 1 files
-- [x] 1.2 `npx astro check` (or build) completes without TypeScript errors
+- [x] 1.1 `npm run lint` passes across all new and modified Phase 1 files — 2ccd663
+- [x] 1.2 `npx astro check` (or build) completes without TypeScript errors — 2ccd663
 
 #### Manual
 
-- [x] 1.3 "Forgot password?" link visible below password field on `/auth/signin`; navigates to `/auth/forgot-password`
-- [x] 1.4 Invalid email on forgot-password form shows client-side error without redirect
-- [x] 1.5 Valid email submission navigates to `/auth/reset-email-sent`
-- [x] 1.6 Supabase dashboard shows a password recovery event for the submitted email
+- [x] 1.3 "Forgot password?" link visible below password field on `/auth/signin`; navigates to `/auth/forgot-password` — 2ccd663
+- [x] 1.4 Invalid email on forgot-password form shows client-side error without redirect — 2ccd663
+- [x] 1.5 Valid email submission navigates to `/auth/reset-email-sent` — 2ccd663
+- [x] 1.6 Supabase dashboard shows a password recovery event for the submitted email — 2ccd663
 
 ### Phase 2: Confirm callback + update-password flow
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` passes across all new and modified Phase 2 files
-- [ ] 2.2 `npx astro check` (or build) completes without TypeScript errors
+- [x] 2.1 `npm run lint` passes across all new and modified Phase 2 files
+- [x] 2.2 `npx astro check` (or build) completes without TypeScript errors
 
 #### Manual
 
-- [ ] 2.3 `/auth/update-password` without a session redirects to `/auth/signin`
-- [ ] 2.4 `/auth/confirm?token_hash=invalid&type=recovery` redirects to `/auth/auth-error`; both links on auth-error page work
-- [ ] 2.5 Mismatched passwords on update-password form shows client-side error without redirect
-- [ ] 2.6 Valid password pair from an authenticated session redirects to `/inventory`
+- [x] 2.3 `/auth/update-password` without a session redirects to `/auth/signin`
+- [x] 2.4 `/auth/confirm?token_hash=invalid&type=recovery` redirects to `/auth/auth-error`; both links on auth-error page work
+- [x] 2.5 Mismatched passwords on update-password form shows client-side error without redirect
+- [x] 2.6 Valid password pair from an authenticated session redirects to `/inventory`
 
 ### Phase 3: Supabase email template + end-to-end verification
 

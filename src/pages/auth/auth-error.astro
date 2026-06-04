@@ -1,0 +1,28 @@
+---
+import Layout from "@/layouts/Layout.astro";
+---
+
+<Layout title="Reset link invalid">
+  <div class="bg-cosmic flex min-h-screen items-center justify-center p-4">
+    <div
+      class="w-full max-w-sm rounded-2xl border border-white/10 bg-white/10 p-8 text-center text-white backdrop-blur-xl"
+    >
+      <div class="mb-4 text-5xl">🔗</div>
+      <h1 class="mb-3 bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-2xl font-bold text-transparent">
+        Reset link invalid
+      </h1>
+      <p class="mb-6 text-blue-100/80">
+        This password reset link has expired or has already been used. Request a new one below.
+      </p>
+      <div class="space-y-2">
+        <a
+          href="/auth/forgot-password"
+          class="block rounded-lg bg-purple-600 px-4 py-2 font-medium text-white transition-colors hover:bg-purple-500"
+        >
+          Request a new reset link
+        </a>
+        <a href="/auth/signin" class="block py-2 text-sm text-purple-300 hover:underline">Back to sign in</a>
+      </div>
+    </div>
+  </div>
+</Layout>

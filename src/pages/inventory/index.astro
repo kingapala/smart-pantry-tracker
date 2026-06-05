@@ -2,7 +2,8 @@
 import Layout from "@/layouts/Layout.astro";
 import Topbar from "@/components/Topbar.astro";
 import { createClient } from "@/lib/supabase";
-import { formatDateDisplay } from "@/lib/date";
+import { formatDateDisplay, nowUTC } from "@/lib/date";
+import { cn } from "@/lib/utils";
 
 interface Product {
   id: string;
@@ -15,6 +16,10 @@ interface Product {
 }
 
 const { user } = Astro.locals;
+const todayStr = nowUTC().slice(0, 10);
+const soonDate = new Date(nowUTC());
+soonDate.setUTCDate(soonDate.getUTCDate() + 3);
+const soonStr = soonDate.toISOString().slice(0, 10);
 const sortParam = Astro.url.searchParams.get("sort");
 const supabase = createClient(Astro.request.headers, Astro.cookies);
 let products: Product[] = [];
@@ -94,7 +99,14 @@ const error = rawError
               </thead>
               <tbody>
                 {products.map((p) => (
-                  <tr class="border-b border-white/5 last:border-0 hover:bg-white/5">
+                  <tr class={cn(
+                    "border-b last:border-0",
+                    p.expiry_date !== null && p.expiry_date <= todayStr
+                      ? "bg-red-500/10 border-red-500/20 hover:bg-red-500/20"
+                      : p.expiry_date !== null && p.expiry_date > todayStr && p.expiry_date <= soonStr
+                        ? "bg-amber-500/10 border-amber-500/20 hover:bg-amber-500/20"
+                        : "border-white/5 hover:bg-white/5"
+                  )}>
                     <td class="px-4 py-3 font-medium">{p.name}</td>
                     <td class="px-4 py-3 text-blue-100/80">
                       {p.quantity} {p.unit}
@@ -102,7 +114,14 @@ const error = rawError
                     <td class="px-4 py-3 text-blue-100/80">
                       {p.min_threshold} {p.unit}
                     </td>
-                    <td class="px-4 py-3 text-blue-100/80">{p.expiry_date ? formatDateDisplay(p.expiry_date) : "—"}</td>
+                    <td class={cn(
+                      "px-4 py-3",
+                      p.expiry_date !== null && p.expiry_date <= todayStr
+                        ? "text-red-400 font-medium"
+                        : p.expiry_date !== null && p.expiry_date > todayStr && p.expiry_date <= soonStr
+                          ? "text-amber-400 font-medium"
+                          : "text-blue-100/80"
+                    )}>{p.expiry_date ? formatDateDisplay(p.expiry_date) : "—"}</td>
                     <td class="px-4 py-3 text-center">
                       {p.add_to_list ? (
                         <span class="text-xs text-green-400">✓</span>

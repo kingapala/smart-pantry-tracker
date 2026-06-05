@@ -92,6 +92,7 @@ const error = Astro.url.searchParams.get("error");
                       <div class="flex justify-end gap-2">
                         <a
                           href={`/inventory/${p.id}/edit`}
+                          aria-label={`Edit ${p.name}`}
                           class="rounded border border-white/20 px-2 py-1 text-xs hover:bg-white/10"
                         >
                           Edit
@@ -149,9 +150,11 @@ const error = Astro.url.searchParams.get("error");
   const cancelBtn = document.getElementById("delete-cancel");
   const confirmBtn = document.getElementById("delete-confirm");
   let pendingId: string | null = null;
+  let pendingTrigger: HTMLButtonElement | null = null;
 
   document.querySelectorAll<HTMLButtonElement>(".delete-trigger").forEach((btn) => {
     btn.addEventListener("click", () => {
+      pendingTrigger = btn;
       pendingId = btn.dataset.productId ?? null;
       if (nameEl) nameEl.textContent = btn.dataset.productName ?? "";
       dialog?.showModal();
@@ -170,6 +173,8 @@ const error = Astro.url.searchParams.get("error");
 
   // Close on Escape (native dialog behaviour — redundant but explicit)
   dialog?.addEventListener("close", () => {
+    pendingTrigger?.focus();
+    pendingTrigger = null;
     pendingId = null;
   });
 

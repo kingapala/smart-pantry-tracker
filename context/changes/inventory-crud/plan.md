@@ -257,30 +257,30 @@ No schema or data changes. No breaking API changes.
 
 #### Automated
 
-- [x] 1.1 `npm run lint` passes
-- [x] 1.2 `npx astro check` passes
+- [x] 1.1 `npm run lint` passes — c72427e
+- [x] 1.2 `npx astro check` passes — c72427e
 
 #### Manual
 
-- [x] 1.3 `/inventory` shows Topbar with user email, Dashboard link, Sign out
-- [x] 1.4 Sign out from Topbar redirects to `/`
-- [x] 1.5 `/inventory/new` shows Topbar; form card centred below it
-- [x] 1.6 `/inventory/[id]/edit` shows Topbar; form card centred below it
-- [x] 1.7 Dashboard shows Topbar with user email and Sign out; form card centred
-- [x] 1.8 Dashboard "Open Pantry" link navigates to `/inventory`
+- [x] 1.3 `/inventory` shows Topbar with user email, Dashboard link, Sign out — c72427e
+- [x] 1.4 Sign out from Topbar redirects to `/` — c72427e
+- [x] 1.5 `/inventory/new` shows Topbar; form card centred below it — c72427e
+- [x] 1.6 `/inventory/[id]/edit` shows Topbar; form card centred below it — c72427e
+- [x] 1.7 Dashboard shows Topbar with user email and Sign out; form card centred — c72427e
+- [x] 1.8 Dashboard "Open Pantry" link navigates to `/inventory` — c72427e
 
 ### Phase 2: Accessibility
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` passes
-- [ ] 2.2 `npx astro check` passes
+- [x] 2.1 `npm run lint` passes
+- [x] 2.2 `npx astro check` passes
 
 #### Manual
 
-- [ ] 2.3 Delete dialog Escape closes + focus returns to trigger Delete button
-- [ ] 2.4 Delete dialog Cancel closes + focus returns to trigger Delete button
-- [ ] 2.5 Edit links announced as "Edit [product name]" in accessibility tree
+- [x] 2.3 Delete dialog Escape closes + focus returns to trigger Delete button
+- [x] 2.4 Delete dialog Cancel closes + focus returns to trigger Delete button
+- [x] 2.5 Edit links announced as "Edit [product name]" in accessibility tree
 
 ### Phase 3: Verification
 

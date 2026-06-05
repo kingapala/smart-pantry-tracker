@@ -1,7 +1,7 @@
 ---
 change_id: inventory-expiry-and-sort
 title: Expired product highlighting and session-persistent expiry sort
-status: plan_reviewed
+status: implementing
 created: 2026-06-04
 updated: 2026-06-05
 archived_at: null

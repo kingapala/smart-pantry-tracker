@@ -212,8 +212,8 @@ Use `class={cn(...)}` syntax — `class:list` is the Astro-native alternative bu
 
 #### Automated
 
-- [ ] 1.1 `npm run lint` passes with no new errors
-- [ ] 1.2 `npx astro sync` completes without type errors
+- [x] 1.1 `npm run lint` passes with no new errors
+- [x] 1.2 `npx astro sync` completes without type errors
 
 #### Manual
 

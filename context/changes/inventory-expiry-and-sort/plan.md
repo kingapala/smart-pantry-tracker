@@ -228,15 +228,15 @@ Use `class={cn(...)}` syntax — `class:list` is the Astro-native alternative bu
 
 #### Automated
 
-- [x] 2.1 `npm run lint` passes with no new errors
-- [x] 2.2 `npx astro sync` completes without type errors
+- [x] 2.1 `npm run lint` passes with no new errors — 4685b52
+- [x] 2.2 `npx astro sync` completes without type errors — 4685b52
 
 #### Manual
 
-- [x] 2.3 Product with `expiry_date` = today shows red row and red date text
-- [x] 2.4 Product with `expiry_date` = yesterday shows red row and red date text
-- [x] 2.5 Product with `expiry_date` = today+1 to today+3 shows amber row and amber date text
-- [x] 2.6 Product with `expiry_date` = today+4 or later shows neutral row
-- [x] 2.7 Product with no expiry date shows neutral row
-- [x] 2.8 Highlighting works correctly in both default and `?sort=expiry` order
-- [x] 2.9 No regression in add, edit, and delete flows
+- [x] 2.3 Product with `expiry_date` = today shows red row and red date text — 4685b52
+- [x] 2.4 Product with `expiry_date` = yesterday shows red row and red date text — 4685b52
+- [x] 2.5 Product with `expiry_date` = today+1 to today+3 shows amber row and amber date text — 4685b52
+- [x] 2.6 Product with `expiry_date` = today+4 or later shows neutral row — 4685b52
+- [x] 2.7 Product with no expiry date shows neutral row — 4685b52
+- [x] 2.8 Highlighting works correctly in both default and `?sort=expiry` order — 4685b52
+- [x] 2.9 No regression in add, edit, and delete flows — 4685b52

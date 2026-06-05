@@ -292,7 +292,7 @@ Also verify that the Supabase project's "Site URL" (Authentication → URL Confi
 
 #### Manual
 
-- [x] 3.0 Supabase dashboard → Authentication → URL Configuration → Site URL matches the app's URL (`http://localhost:4321` or deployed URL)
-- [x] 3.1 Full end-to-end reset flow completes: forgot-password → email → confirm → update-password → `/inventory`
-- [x] 3.2 Re-using the same reset link shows `/auth/auth-error`
-- [x] 3.3 Sign-in with the new password succeeds after reset
+- [x] 3.0 Supabase dashboard → Authentication → URL Configuration → Site URL matches the app's URL (`http://localhost:4321` or deployed URL) — 1501e82
+- [x] 3.1 Full end-to-end reset flow completes: forgot-password → email → confirm → update-password → `/inventory` — 1501e82
+- [x] 3.2 Re-using the same reset link shows `/auth/auth-error` — 1501e82
+- [x] 3.3 Sign-in with the new password succeeds after reset — 1501e82

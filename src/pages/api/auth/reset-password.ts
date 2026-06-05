@@ -3,7 +3,11 @@ import { createClient } from "@/lib/supabase";
 
 export const POST: APIRoute = async (context) => {
   const form = await context.request.formData();
-  const email = form.get("email") as string;
+  const email = form.get("email") as string | null;
+
+  if (!email?.trim()) {
+    return context.redirect(`/auth/forgot-password?error=${encodeURIComponent("Email is required")}`);
+  }
 
   const supabase = createClient(context.request.headers, context.cookies);
   if (!supabase) {

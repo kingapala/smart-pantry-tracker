@@ -273,34 +273,34 @@ No schema or data changes. No breaking API changes.
 
 #### Automated
 
-- [x] 2.1 `npm run lint` passes
-- [x] 2.2 `npx astro check` passes
+- [x] 2.1 `npm run lint` passes — 78ab22a
+- [x] 2.2 `npx astro check` passes — 78ab22a
 
 #### Manual
 
-- [x] 2.3 Delete dialog Escape closes + focus returns to trigger Delete button
-- [x] 2.4 Delete dialog Cancel closes + focus returns to trigger Delete button
-- [x] 2.5 Edit links announced as "Edit [product name]" in accessibility tree
+- [x] 2.3 Delete dialog Escape closes + focus returns to trigger Delete button — 78ab22a
+- [x] 2.4 Delete dialog Cancel closes + focus returns to trigger Delete button — 78ab22a
+- [x] 2.5 Edit links announced as "Edit [product name]" in accessibility tree — 78ab22a
 
 ### Phase 3: Verification
 
 #### Automated
 
-- [ ] 3.1 `npm run lint` passes (full project)
-- [ ] 3.2 `npx astro check` passes
+- [x] 3.1 `npm run lint` passes (full project)
+- [x] 3.2 `npx astro check` passes
 
 #### Manual
 
-- [ ] 3.3 FR-004: Add product with expiry date — appears in list correctly
-- [ ] 3.4 FR-004: Add product without expiry date — expiry shows "—"
-- [ ] 3.5 FR-004: Missing required field — browser blocks submit
-- [ ] 3.6 FR-005: Empty state message and CTA visible
-- [ ] 3.7 FR-005: Product list shows all fields correctly
-- [ ] 3.8 FR-006: Edit form pre-populated; all field changes saved
-- [ ] 3.9 FR-006: Clearing expiry date persists correctly
-- [ ] 3.10 FR-007: Delete dialog shows product name; Cancel leaves product + focus returns
-- [ ] 3.11 FR-007: Confirm deletes product
-- [ ] 3.12 Keyboard: full add-product flow keyboard-only
-- [ ] 3.13 Keyboard: delete dialog Tab + Escape + focus-return flow
-- [ ] 3.14 Data isolation: cross-user edit URL redirects to /inventory
-- [ ] 3.15 NFR feedback: all operations complete and redirect within 2 seconds
+- [x] 3.3 FR-004: Add product with expiry date — appears in list correctly
+- [x] 3.4 FR-004: Add product without expiry date — expiry shows "—"
+- [x] 3.5 FR-004: Missing required field — browser blocks submit
+- [x] 3.6 FR-005: Empty state message and CTA visible
+- [x] 3.7 FR-005: Product list shows all fields correctly
+- [x] 3.8 FR-006: Edit form pre-populated; all field changes saved
+- [x] 3.9 FR-006: Clearing expiry date persists correctly
+- [x] 3.10 FR-007: Delete dialog shows product name; Cancel leaves product + focus returns
+- [x] 3.11 FR-007: Confirm deletes product
+- [x] 3.12 Keyboard: full add-product flow keyboard-only
+- [x] 3.13 Keyboard: delete dialog Tab + Escape + focus-return flow
+- [x] 3.14 Data isolation: cross-user edit URL redirects to /inventory
+- [x] 3.15 NFR feedback: all operations complete and redirect within 2 seconds

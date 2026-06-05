@@ -278,21 +278,21 @@ Also verify that the Supabase project's "Site URL" (Authentication → URL Confi
 
 #### Automated
 
-- [x] 2.1 `npm run lint` passes across all new and modified Phase 2 files
-- [x] 2.2 `npx astro check` (or build) completes without TypeScript errors
+- [x] 2.1 `npm run lint` passes across all new and modified Phase 2 files — 6c26bff
+- [x] 2.2 `npx astro check` (or build) completes without TypeScript errors — 6c26bff
 
 #### Manual
 
-- [x] 2.3 `/auth/update-password` without a session redirects to `/auth/signin`
-- [x] 2.4 `/auth/confirm?token_hash=invalid&type=recovery` redirects to `/auth/auth-error`; both links on auth-error page work
-- [x] 2.5 Mismatched passwords on update-password form shows client-side error without redirect
-- [x] 2.6 Valid password pair from an authenticated session redirects to `/inventory`
+- [x] 2.3 `/auth/update-password` without a session redirects to `/auth/signin` — 6c26bff
+- [x] 2.4 `/auth/confirm?token_hash=invalid&type=recovery` redirects to `/auth/auth-error`; both links on auth-error page work — 6c26bff
+- [x] 2.5 Mismatched passwords on update-password form shows client-side error without redirect — 6c26bff
+- [x] 2.6 Valid password pair from an authenticated session redirects to `/inventory` — 6c26bff
 
 ### Phase 3: Supabase email template + end-to-end verification
 
 #### Manual
 
-- [ ] 3.0 Supabase dashboard → Authentication → URL Configuration → Site URL matches the app's URL (`http://localhost:4321` or deployed URL)
-- [ ] 3.1 Full end-to-end reset flow completes: forgot-password → email → confirm → update-password → `/inventory`
-- [ ] 3.2 Re-using the same reset link shows `/auth/auth-error`
-- [ ] 3.3 Sign-in with the new password succeeds after reset
+- [x] 3.0 Supabase dashboard → Authentication → URL Configuration → Site URL matches the app's URL (`http://localhost:4321` or deployed URL)
+- [x] 3.1 Full end-to-end reset flow completes: forgot-password → email → confirm → update-password → `/inventory`
+- [x] 3.2 Re-using the same reset link shows `/auth/auth-error`
+- [x] 3.3 Sign-in with the new password succeeds after reset

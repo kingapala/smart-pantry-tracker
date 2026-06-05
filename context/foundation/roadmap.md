@@ -3,7 +3,7 @@ project: "Smart Pantry Tracker"
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-06-02
+updated: 2026-06-05
 prd_version: 1
 main_goal: speed
 top_blocker: capacity
@@ -30,7 +30,7 @@ Smart Pantry Tracker addresses a structural problem: every existing tracking mec
 | ID   | Change ID                  | Outcome (user can …)                                                                     | Prerequisites | PRD refs                                      | Status   |
 | ---- | -------------------------- | ---------------------------------------------------------------------------------------- | ------------- | --------------------------------------------- | -------- |
 | F-01 | db-schema-and-rls          | (foundation) Product schema migrated; RLS policies enforce per-user isolation            | —             | Access Control, NFR: data isolation           | done     |
-| S-01 | auth-completion            | sign out and request a password reset via email                                          | —             | FR-001, FR-002, FR-003, FR-013                | ready    |
+| S-01 | auth-completion            | sign out and request a password reset via email                                          | —             | FR-001, FR-002, FR-003, FR-013                | done     |
 | S-02 | inventory-crud             | add, view, edit, and delete products in their inventory through a web interface          | F-01          | FR-004–FR-007, US-01, NFR: UI feedback + a11y | ready    |
 | S-04 | shopping-list-core         | view the auto-generated shopping list; list updates when qty drops below threshold       | F-01, S-02    | FR-010, FR-011, US-01                         | proposed |
 | S-03 | inventory-expiry-and-sort  | see expired products highlighted in red and sort inventory by expiry date                | S-02          | FR-008, FR-009                                | proposed |
@@ -84,7 +84,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** FR-013 (password reset) relies on Supabase email delivery; hosted Supabase defaults work out of the box, but the reset-link callback route must be implemented in Astro to complete the flow. Without it, accounts are permanently inaccessible on password loss — a must-have gap, not a nice-to-have.
-- **Status:** ready
+- **Status:** done
 
 ---
 
@@ -167,3 +167,4 @@ None. All PRD questions were resolved inline during the shaping and Socrates rou
 ## Done
 
 - **F-01: Database schema + RLS** — Implemented 2026-06-02; `context/changes/db-schema-and-rls/` (status: `impl_reviewed`). Not yet formally archived — run `/10x-archive db-schema-and-rls` to close the loop. Lessons: null-check `createClient()`; always use `formatDate()`/`nowUTC()` (see `context/foundation/lessons.md`).
+- **S-01: User can sign out and request a password reset via email** — Archived 2026-06-05 → `context/archive/2026-06-04-auth-completion/`. Lesson: —.

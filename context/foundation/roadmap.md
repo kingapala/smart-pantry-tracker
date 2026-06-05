@@ -31,7 +31,7 @@ Smart Pantry Tracker addresses a structural problem: every existing tracking mec
 | ---- | -------------------------- | ---------------------------------------------------------------------------------------- | ------------- | --------------------------------------------- | -------- |
 | F-01 | db-schema-and-rls          | (foundation) Product schema migrated; RLS policies enforce per-user isolation            | —             | Access Control, NFR: data isolation           | done     |
 | S-01 | auth-completion            | sign out and request a password reset via email                                          | —             | FR-001, FR-002, FR-003, FR-013                | done     |
-| S-02 | inventory-crud             | add, view, edit, and delete products in their inventory through a web interface          | F-01          | FR-004–FR-007, US-01, NFR: UI feedback + a11y | ready    |
+| S-02 | inventory-crud             | add, view, edit, and delete products in their inventory through a web interface          | F-01          | FR-004–FR-007, US-01, NFR: UI feedback + a11y | done     |
 | S-04 | shopping-list-core         | view the auto-generated shopping list; list updates when qty drops below threshold       | F-01, S-02    | FR-010, FR-011, US-01                         | proposed |
 | S-03 | inventory-expiry-and-sort  | see expired products highlighted in red and sort inventory by expiry date                | S-02          | FR-008, FR-009                                | proposed |
 | S-05 | shopping-list-complete     | check off a shopping list item with qty purchased and manually add one-off items         | S-04          | FR-012, FR-014                                | proposed |
@@ -98,7 +98,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** This slice is end-to-end: data queries, API routes, and the full inventory UI (list page, add/edit forms, delete confirmation dialog). FR-006 specifies "update any field" as a full edit form — the PRD explicitly deferred an inline quantity stepper to v2. Pressure to improve UX conflicts with the `speed` goal; keep the edit form as-is per PRD decision.
-- **Status:** ready
+- **Status:** done
 
 ---
 
@@ -168,3 +168,4 @@ None. All PRD questions were resolved inline during the shaping and Socrates rou
 
 - **F-01: Database schema + RLS** — Implemented 2026-06-02; `context/changes/db-schema-and-rls/` (status: `impl_reviewed`). Not yet formally archived — run `/10x-archive db-schema-and-rls` to close the loop. Lessons: null-check `createClient()`; always use `formatDate()`/`nowUTC()` (see `context/foundation/lessons.md`).
 - **S-01: User can sign out and request a password reset via email** — Archived 2026-06-05 → `context/archive/2026-06-04-auth-completion/`. Lesson: —.
+- **S-02: add, view, edit, and delete products in their inventory through a web interface** — Archived 2026-06-05 → `context/archive/2026-06-05-inventory-crud/`. Lesson: —.

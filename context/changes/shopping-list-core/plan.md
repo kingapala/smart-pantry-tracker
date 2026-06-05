@@ -197,8 +197,8 @@ Page title (browser tab): `"Shopping List"`. H1 gradient: `"Shopping List"` usin
 
 #### Automated
 
-- [x] 1.1 Lint passes: `npm run lint`
-- [x] 1.2 Type check passes: `npx astro check`
+- [x] 1.1 Lint passes: `npm run lint` — 5058930
+- [x] 1.2 Type check passes: `npx astro check` — 5058930
 
 #### Manual
 
@@ -210,8 +210,8 @@ Page title (browser tab): `"Shopping List"`. H1 gradient: `"Shopping List"` usin
 
 #### Automated
 
-- [ ] 2.1 Lint passes: `npm run lint`
-- [ ] 2.2 Type check passes: `npx astro check`
+- [x] 2.1 Lint passes: `npm run lint`
+- [x] 2.2 Type check passes: `npx astro check`
 
 #### Manual
 

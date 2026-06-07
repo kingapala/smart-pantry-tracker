@@ -1,0 +1,241 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Topbar from "@/components/Topbar.astro";
+import { createClient } from "@/lib/supabase";
+
+interface PantryProduct {
+  id: string;
+  name: string;
+  quantity: number;
+  unit: string;
+  min_threshold: number;
+}
+
+interface ManualItem {
+  id: string;
+  name: string;
+  quantity: number;
+  unit: string;
+}
+
+interface MergedItem {
+  id: string;
+  name: string;
+  buy: number;
+  unit: string;
+  type: "pantry" | "manual";
+}
+
+const { user } = Astro.locals;
+const supabase = createClient(Astro.request.headers, Astro.cookies);
+let items: MergedItem[] = [];
+
+if (user && supabase) {
+  const [productsResult, manualResult] = await Promise.all([
+    supabase
+      .from("products")
+      .select("id, name, quantity, unit, min_threshold")
+      .eq("add_to_list", true)
+      .order("name", { ascending: true }),
+    supabase.from("shopping_list_items").select("id, name, quantity, unit").order("name", { ascending: true }),
+  ]);
+
+  if (productsResult.error) {
+    return Astro.redirect(`/shopping-list?error=${encodeURIComponent(productsResult.error.message)}`);
+  }
+  if (manualResult.error) {
+    return Astro.redirect(`/shopping-list?error=${encodeURIComponent(manualResult.error.message)}`);
+  }
+
+  const pantryItems = (productsResult.data as PantryProduct[])
+    .filter((p) => p.quantity < p.min_threshold)
+    .map((p) => ({
+      id: p.id,
+      name: p.name,
+      buy: p.min_threshold - p.quantity,
+      unit: p.unit,
+      type: "pantry" as const,
+    }));
+
+  const manualItems = (manualResult.data as ManualItem[]).map((i) => ({
+    id: i.id,
+    name: i.name,
+    buy: i.quantity,
+    unit: i.unit,
+    type: "manual" as const,
+  }));
+
+  items = [...pantryItems, ...manualItems].sort((a, b) => a.name.localeCompare(b.name));
+}
+
+const rawError = Astro.url.searchParams.get("error");
+const error = rawError
+  ? (() => {
+      try {
+        return decodeURIComponent(rawError);
+      } catch {
+        return rawError;
+      }
+    })()
+  : null;
+---
+
+<Layout title="Shopping List">
+  <div class="bg-cosmic min-h-screen p-6 text-white">
+    <div class="mx-auto max-w-4xl">
+      <Topbar />
+      <div class="mb-6 flex items-center justify-between">
+        <h1 class="bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-2xl font-bold text-transparent">
+          Shopping List
+        </h1>
+        <a
+          href="/shopping-list/new"
+          class="rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20"
+        >
+          + Add item
+        </a>
+      </div>
+
+      {
+        error && (
+          <div class="mb-4 rounded-lg border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-300">
+            {error}
+          </div>
+        )
+      }
+
+      {
+        items.length === 0 ? (
+          <div class="rounded-2xl border border-white/10 bg-white/10 p-8 text-center backdrop-blur-xl">
+            <p class="text-blue-100/60">Your pantry is fully stocked.</p>
+            <a href="/inventory" class="mt-4 inline-block text-sm text-purple-300 hover:underline">
+              Go to My Pantry →
+            </a>
+          </div>
+        ) : (
+          <div class="overflow-hidden rounded-2xl border border-white/10 backdrop-blur-xl">
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="border-b border-white/10 bg-white/5 text-left text-blue-100/60">
+                  <th class="px-4 py-3 font-medium">Name</th>
+                  <th class="px-4 py-3 font-medium">Buy</th>
+                  <th class="px-4 py-3" />
+                </tr>
+              </thead>
+              <tbody>
+                {items.map((item) => (
+                  <tr class="border-b border-white/5 last:border-0 hover:bg-white/5">
+                    <td class="px-4 py-3 font-medium">{item.name}</td>
+                    <td class="px-4 py-3 text-blue-100/80">
+                      {item.buy} {item.unit}
+                    </td>
+                    <td class="px-4 py-3">
+                      <div class="flex justify-end gap-2">
+                        {item.type === "pantry" && (
+                          <a
+                            href={`/inventory/${item.id}/edit`}
+                            aria-label={`Edit ${item.name}`}
+                            class="rounded border border-white/20 px-2 py-1 text-xs hover:bg-white/10"
+                          >
+                            Edit
+                          </a>
+                        )}
+                        <button
+                          class="delete-trigger rounded border border-red-400/30 px-2 py-1 text-xs text-red-400 hover:bg-red-400/10"
+                          data-item-id={item.id}
+                          data-item-name={item.name}
+                          data-item-type={item.type}
+                          aria-label={`Delete ${item.name}`}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )
+      }
+    </div>
+  </div>
+
+  <!-- Shared delete confirmation dialog -->
+  <dialog
+    id="delete-dialog"
+    aria-labelledby="delete-dialog-title"
+    class="w-full max-w-sm rounded-2xl border border-white/10 bg-gray-900 p-6 text-white shadow-xl backdrop:bg-black/50"
+  >
+    <h2 id="delete-dialog-title" class="mb-2 text-lg font-semibold">Remove from list?</h2>
+    <p class="mb-6 text-sm text-blue-100/70">
+      Remove <strong id="delete-dialog-name"></strong> from your shopping list?
+    </p>
+    <div class="flex gap-3">
+      <button
+        id="delete-cancel"
+        class="flex-1 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20"
+      >
+        Cancel
+      </button>
+      <button
+        id="delete-confirm"
+        class="flex-1 rounded-lg bg-red-500 px-4 py-2 text-sm font-medium transition-colors hover:bg-red-600"
+      >
+        Remove
+      </button>
+    </div>
+  </dialog>
+</Layout>
+
+<script>
+  const dialog = document.getElementById("delete-dialog") as HTMLDialogElement | null;
+  const nameEl = document.getElementById("delete-dialog-name");
+  const cancelBtn = document.getElementById("delete-cancel");
+  const confirmBtn = document.getElementById("delete-confirm");
+  let pendingId: string | null = null;
+  let pendingType: string | null = null;
+  let pendingTrigger: HTMLButtonElement | null = null;
+
+  document.querySelectorAll<HTMLButtonElement>(".delete-trigger").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      pendingTrigger = btn;
+      pendingId = btn.dataset.itemId ?? null;
+      pendingType = btn.dataset.itemType ?? null;
+      if (nameEl) nameEl.textContent = btn.dataset.itemName ?? "";
+      dialog?.showModal();
+    });
+  });
+
+  cancelBtn?.addEventListener("click", () => {
+    dialog?.close();
+    pendingId = null;
+    pendingType = null;
+  });
+
+  dialog?.addEventListener("click", (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+
+  dialog?.addEventListener("close", () => {
+    pendingTrigger?.focus();
+    pendingTrigger = null;
+    pendingId = null;
+    pendingType = null;
+  });
+
+  confirmBtn?.addEventListener("click", async () => {
+    if (!pendingId || !pendingType) return;
+    const id = pendingId;
+    const type = pendingType;
+    dialog?.close();
+    const endpoint = type === "manual" ? `/api/shopping-list-items/${id}` : `/api/products/${id}`;
+    const response = await fetch(endpoint, { method: "DELETE" });
+    if (response.ok) {
+      window.location.href = "/shopping-list";
+    } else {
+      const errorMsg = await response.text();
+      window.location.href = `/shopping-list?error=${encodeURIComponent(errorMsg)}`;
+    }
+  });
+</script>

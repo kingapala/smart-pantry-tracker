@@ -1,0 +1,102 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import Topbar from "@/components/Topbar.astro";
+
+const rawError = Astro.url.searchParams.get("error");
+const error = rawError
+  ? (() => {
+      try {
+        return decodeURIComponent(rawError);
+      } catch {
+        return rawError;
+      }
+    })()
+  : null;
+---
+
+<Layout title="Add to shopping list">
+  <div class="bg-cosmic flex min-h-screen flex-col pt-4">
+    <Topbar />
+    <div class="flex flex-1 items-center justify-center p-4">
+      <div class="w-full max-w-md rounded-2xl border border-white/10 bg-white/10 p-8 text-white backdrop-blur-xl">
+        <h1 class="mb-6 bg-gradient-to-r from-blue-200 to-purple-200 bg-clip-text text-2xl font-bold text-transparent">
+          Add to shopping list
+        </h1>
+
+        {
+          error && (
+            <div class="mb-4 rounded-lg border border-red-400/30 bg-red-400/10 px-4 py-3 text-sm text-red-300">
+              {error}
+            </div>
+          )
+        }
+
+        <form method="POST" action="/api/shopping-list-items" class="space-y-4">
+          <div>
+            <label for="name" class="mb-1 block text-sm text-blue-100/80">Name *</label>
+            <input
+              id="name"
+              name="name"
+              type="text"
+              required
+              class="w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/30 focus:ring-2 focus:ring-purple-400 focus:outline-none"
+              placeholder="e.g. Milk"
+            />
+          </div>
+
+          <div class="flex gap-3">
+            <div class="flex-1">
+              <label for="quantity" class="mb-1 block text-sm text-blue-100/80">How many to buy *</label>
+              <input
+                id="quantity"
+                name="quantity"
+                type="number"
+                min="0.01"
+                step="any"
+                required
+                class="w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/30 focus:ring-2 focus:ring-purple-400 focus:outline-none"
+                placeholder="1"
+              />
+            </div>
+            <div class="flex-1">
+              <label for="unit" class="mb-1 block text-sm text-blue-100/80">Unit *</label>
+              <input
+                id="unit"
+                name="unit"
+                type="text"
+                required
+                class="w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/30 focus:ring-2 focus:ring-purple-400 focus:outline-none"
+                placeholder="e.g. l, kg, pcs"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label for="expiry_date" class="mb-1 block text-sm text-blue-100/80">Expiry date</label>
+            <input
+              id="expiry_date"
+              name="expiry_date"
+              type="date"
+              class="w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white focus:ring-2 focus:ring-purple-400 focus:outline-none"
+            />
+          </div>
+
+          <div class="flex gap-3 pt-2">
+            <button
+              type="submit"
+              class="flex-1 rounded-lg bg-purple-500 px-4 py-2 text-sm font-medium transition-colors hover:bg-purple-600"
+            >
+              Add to list
+            </button>
+            <a
+              href="/shopping-list"
+              class="rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20"
+            >
+              Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</Layout>

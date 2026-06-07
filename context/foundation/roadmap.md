@@ -3,7 +3,7 @@ project: "Smart Pantry Tracker"
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-06-05
+updated: 2026-06-07
 prd_version: 1
 main_goal: speed
 top_blocker: capacity
@@ -32,7 +32,7 @@ Smart Pantry Tracker addresses a structural problem: every existing tracking mec
 | F-01 | db-schema-and-rls          | (foundation) Product schema migrated; RLS policies enforce per-user isolation            | —             | Access Control, NFR: data isolation           | done     |
 | S-01 | auth-completion            | sign out and request a password reset via email                                          | —             | FR-001, FR-002, FR-003, FR-013                | done     |
 | S-02 | inventory-crud             | add, view, edit, and delete products in their inventory through a web interface          | F-01          | FR-004–FR-007, US-01, NFR: UI feedback + a11y | done     |
-| S-04 | shopping-list-core         | view the auto-generated shopping list; list updates when qty drops below threshold       | F-01, S-02    | FR-010, FR-011, US-01                         | proposed |
+| S-04 | shopping-list-core         | view the auto-generated shopping list; list updates when qty drops below threshold       | F-01, S-02    | FR-010, FR-011, US-01                         | done     |
 | S-03 | inventory-expiry-and-sort  | see expired products highlighted in red and sort inventory by expiry date                | S-02          | FR-008, FR-009                                | proposed |
 | S-05 | shopping-list-complete     | check off a shopping list item with qty purchased and manually add one-off items         | S-04          | FR-012, FR-014                                | proposed |
 
@@ -112,7 +112,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** FR-010 business logic (`current_quantity < min_threshold AND addToList=ON`) must be evaluated server-side on every page load to guarantee the list is always a live reflection; client-side caching could introduce stale state. Derive the list via a single DB query per request rather than caching between inventory updates.
-- **Status:** proposed
+- **Status:** done
 
 ---
 
@@ -169,3 +169,4 @@ None. All PRD questions were resolved inline during the shaping and Socrates rou
 - **F-01: Database schema + RLS** — Implemented 2026-06-02; `context/changes/db-schema-and-rls/` (status: `impl_reviewed`). Not yet formally archived — run `/10x-archive db-schema-and-rls` to close the loop. Lessons: null-check `createClient()`; always use `formatDate()`/`nowUTC()` (see `context/foundation/lessons.md`).
 - **S-01: User can sign out and request a password reset via email** — Archived 2026-06-05 → `context/archive/2026-06-04-auth-completion/`. Lesson: —.
 - **S-02: add, view, edit, and delete products in their inventory through a web interface** — Archived 2026-06-05 → `context/archive/2026-06-05-inventory-crud/`. Lesson: —.
+- **S-04: view the auto-generated shopping list; list updates when qty drops below threshold** — Archived 2026-06-07 → `context/archive/2026-06-05-shopping-list-core/`. Lesson: —.

@@ -3,7 +3,7 @@ import Layout from "@/layouts/Layout.astro";
 import Topbar from "@/components/Topbar.astro";
 import { createClient } from "@/lib/supabase";
 
-interface ShoppingItem {
+interface PantryProduct {
   id: string;
   name: string;
   quantity: number;
@@ -11,19 +11,61 @@ interface ShoppingItem {
   min_threshold: number;
 }
 
+interface ManualItem {
+  id: string;
+  name: string;
+  quantity: number;
+  unit: string;
+}
+
+interface MergedItem {
+  id: string;
+  name: string;
+  buy: number;
+  unit: string;
+  type: "pantry" | "manual";
+}
+
 const { user } = Astro.locals;
 const supabase = createClient(Astro.request.headers, Astro.cookies);
-let items: ShoppingItem[] = [];
+let items: MergedItem[] = [];
+
 if (user && supabase) {
-  const { data, error: listError } = await supabase
-    .from("products")
-    .select("id, name, quantity, unit, min_threshold")
-    .eq("add_to_list", true)
-    .order("name", { ascending: true });
-  if (listError) {
-    return Astro.redirect(`/shopping-list?error=${encodeURIComponent(listError.message)}`);
+  const [productsResult, manualResult] = await Promise.all([
+    supabase
+      .from("products")
+      .select("id, name, quantity, unit, min_threshold")
+      .eq("add_to_list", true)
+      .order("name", { ascending: true }),
+    supabase.from("shopping_list_items").select("id, name, quantity, unit").order("name", { ascending: true }),
+  ]);
+
+  if (productsResult.error) {
+    return Astro.redirect(`/shopping-list?error=${encodeURIComponent(productsResult.error.message)}`);
   }
-  items = (data as ShoppingItem[]).filter((p) => p.quantity < p.min_threshold);
+  if (manualResult.error) {
+    return Astro.redirect(`/shopping-list?error=${encodeURIComponent(manualResult.error.message)}`);
+  }
+
+  const pantryItems = (productsResult.data as PantryProduct[])
+    .filter((p) => p.quantity < p.min_threshold)
+    .map((p) => ({
+      id: p.id,
+      name: p.name,
+      buy: p.min_threshold - p.quantity,
+      unit: p.unit,
+      type: "pantry" as const,
+    }));
+
+  const manualItems = (manualResult.data as ManualItem[]).map((i) => ({
+    id: i.id,
+    name: i.name,
+    buy: i.quantity,
+    unit: i.unit,
+    type: "manual" as const,
+  }));
+
+  items = [...pantryItems, ...manualItems].sort((a, b) => a.name.localeCompare(b.name));
 }
 
 const rawError = Astro.url.searchParams.get("error");
@@ -47,10 +89,10 @@ const error = rawError
           Shopping List
         </h1>
         <a
-          href="/inventory/new"
+          href="/shopping-list/new"
           class="rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20"
         >
-          + Add product
+          + Add item
         </a>
       </div>
 
@@ -81,26 +123,29 @@ const error = rawError
                 </tr>
               </thead>
               <tbody>
-                {items.map((p) => (
+                {items.map((item) => (
                   <tr class="border-b border-white/5 last:border-0 hover:bg-white/5">
-                    <td class="px-4 py-3 font-medium">{p.name}</td>
+                    <td class="px-4 py-3 font-medium">{item.name}</td>
                     <td class="px-4 py-3 text-blue-100/80">
-                      {p.min_threshold - p.quantity} {p.unit}
+                      {item.buy} {item.unit}
                     </td>
                     <td class="px-4 py-3">
                       <div class="flex justify-end gap-2">
-                        <a
-                          href={`/inventory/${p.id}/edit`}
-                          aria-label={`Edit ${p.name}`}
-                          class="rounded border border-white/20 px-2 py-1 text-xs hover:bg-white/10"
-                        >
-                          Edit
-                        </a>
+                        {item.type === "pantry" && (
+                          <a
+                            href={`/inventory/${item.id}/edit`}
+                            aria-label={`Edit ${item.name}`}
+                            class="rounded border border-white/20 px-2 py-1 text-xs hover:bg-white/10"
+                          >
+                            Edit
+                          </a>
+                        )}
                         <button
                           class="delete-trigger rounded border border-red-400/30 px-2 py-1 text-xs text-red-400 hover:bg-red-400/10"
-                          data-product-id={p.id}
-                          data-product-name={p.name}
-                          aria-label={`Delete ${p.name}`}
+                          data-item-id={item.id}
+                          data-item-name={item.name}
+                          data-item-type={item.type}
+                          aria-label={`Delete ${item.name}`}
                         >
                           Delete
                         </button>
@@ -122,9 +167,9 @@ const error = rawError
     aria-labelledby="delete-dialog-title"
     class="w-full max-w-sm rounded-2xl border border-white/10 bg-gray-900 p-6 text-white shadow-xl backdrop:bg-black/50"
   >
-    <h2 id="delete-dialog-title" class="mb-2 text-lg font-semibold">Delete product?</h2>
+    <h2 id="delete-dialog-title" class="mb-2 text-lg font-semibold">Remove from list?</h2>
     <p class="mb-6 text-sm text-blue-100/70">
-      This will permanently delete <strong id="delete-dialog-name"></strong>. This action cannot be undone.
+      Remove <strong id="delete-dialog-name"></strong> from your shopping list?
     </p>
     <div class="flex gap-3">
       <button
@@ -137,7 +182,7 @@ const error = rawError
         id="delete-confirm"
         class="flex-1 rounded-lg bg-red-500 px-4 py-2 text-sm font-medium transition-colors hover:bg-red-600"
       >
-        Delete
+        Remove
       </button>
     </div>
   </dialog>
@@ -149,13 +194,15 @@ const error = rawError
   const cancelBtn = document.getElementById("delete-cancel");
   const confirmBtn = document.getElementById("delete-confirm");
   let pendingId: string | null = null;
+  let pendingType: string | null = null;
   let pendingTrigger: HTMLButtonElement | null = null;
 
   document.querySelectorAll<HTMLButtonElement>(".delete-trigger").forEach((btn) => {
     btn.addEventListener("click", () => {
       pendingTrigger = btn;
-      pendingId = btn.dataset.productId ?? null;
-      if (nameEl) nameEl.textContent = btn.dataset.productName ?? "";
+      pendingId = btn.dataset.itemId ?? null;
+      pendingType = btn.dataset.itemType ?? null;
+      if (nameEl) nameEl.textContent = btn.dataset.itemName ?? "";
       dialog?.showModal();
     });
   });
@@ -163,25 +210,27 @@ const error = rawError
   cancelBtn?.addEventListener("click", () => {
     dialog?.close();
     pendingId = null;
+    pendingType = null;
   });
 
-  // Close on backdrop click
   dialog?.addEventListener("click", (e) => {
     if (e.target === dialog) dialog.close();
   });
 
-  // Close on Escape (native dialog behaviour — redundant but explicit)
   dialog?.addEventListener("close", () => {
     pendingTrigger?.focus();
     pendingTrigger = null;
     pendingId = null;
+    pendingType = null;
   });
 
   confirmBtn?.addEventListener("click", async () => {
-    if (!pendingId) return;
+    if (!pendingId || !pendingType) return;
     const id = pendingId;
+    const type = pendingType;
     dialog?.close();
-    const response = await fetch(`/api/products/${id}`, { method: "DELETE" });
+    const endpoint = type === "manual" ? `/api/shopping-list-items/${id}` : `/api/products/${id}`;
+    const response = await fetch(endpoint, { method: "DELETE" });
     if (response.ok) {
       window.location.href = "/shopping-list";
     } else {

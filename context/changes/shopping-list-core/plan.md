@@ -197,33 +197,33 @@ Page title (browser tab): `"Shopping List"`. H1 gradient: `"Shopping List"` usin
 
 #### Automated
 
-- [ ] 1.1 Lint passes: `npm run lint`
-- [ ] 1.2 Type check passes: `npx astro check`
+- [x] 1.1 Lint passes: `npm run lint` — 5058930
+- [x] 1.2 Type check passes: `npx astro check` — 5058930
 
 #### Manual
 
-- [ ] 1.3 Navigating to `/shopping-list` while signed out redirects to `/auth/signin`
-- [ ] 1.4 Topbar shows My Pantry + Shopping List links when signed in
-- [ ] 1.5 Both links navigate to the correct pages
+- [x] 1.3 Navigating to `/shopping-list` while signed out redirects to `/auth/signin` — 5058930
+- [x] 1.4 Topbar shows My Pantry + Shopping List links when signed in — 5058930
+- [x] 1.5 Both links navigate to the correct pages — 5058930
 
 ### Phase 2: Shopping list page with full actions
 
 #### Automated
 
-- [ ] 2.1 Lint passes: `npm run lint`
-- [ ] 2.2 Type check passes: `npx astro check`
+- [x] 2.1 Lint passes: `npm run lint` — e1dbbdf
+- [x] 2.2 Type check passes: `npx astro check` — e1dbbdf
 
 #### Manual
 
-- [ ] 2.3 Signed-in user sees the shopping list at `/shopping-list`
-- [ ] 2.4 Products with `quantity < min_threshold AND add_to_list = true` appear, sorted A–Z
-- [ ] 2.5 Products with `quantity >= min_threshold` or `add_to_list = false` do not appear
-- [ ] 2.6 "Need to buy" column shows `min_threshold − quantity` with correct unit
-- [ ] 2.7 Empty state shows when no products are below threshold
-- [ ] 2.8 "+ Add product" button navigates to `/inventory/new`
-- [ ] 2.9 Edit link navigates to `/inventory/:id/edit` pre-filled
-- [ ] 2.10 Delete button opens confirmation dialog with product name
-- [ ] 2.11 Confirming delete removes the product and refreshes the page
-- [ ] 2.12 Cancelling delete closes dialog and returns focus to the trigger button
-- [ ] 2.13 Updating a product's quantity above its threshold removes it from the list on next page load
-- [ ] 2.14 Error banner renders when `?error=` is present in the URL
+- [x] 2.3 Signed-in user sees the shopping list at `/shopping-list` — e1dbbdf
+- [x] 2.4 Products with `quantity < min_threshold AND add_to_list = true` appear, sorted A–Z — e1dbbdf
+- [x] 2.5 Products with `quantity >= min_threshold` or `add_to_list = false` do not appear — e1dbbdf
+- [x] 2.6 "Need to buy" column shows `min_threshold − quantity` with correct unit — e1dbbdf
+- [x] 2.7 Empty state shows when no products are below threshold — e1dbbdf
+- [x] 2.8 "+ Add product" button navigates to `/inventory/new` — e1dbbdf
+- [x] 2.9 Edit link navigates to `/inventory/:id/edit` pre-filled — e1dbbdf
+- [x] 2.10 Delete button opens confirmation dialog with product name — e1dbbdf
+- [x] 2.11 Confirming delete removes the product and refreshes the page — e1dbbdf
+- [x] 2.12 Cancelling delete closes dialog and returns focus to the trigger button — e1dbbdf
+- [x] 2.13 Updating a product's quantity above its threshold removes it from the list on next page load — e1dbbdf
+- [x] 2.14 Error banner renders when `?error=` is present in the URL — e1dbbdf

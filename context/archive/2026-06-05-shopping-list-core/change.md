@@ -1,10 +1,10 @@
 ---
 change_id: shopping-list-core
 title: Shopping list core
-status: implemented
+status: archived
 created: 2026-06-05
-updated: 2026-06-05
-archived_at: null
+updated: 2026-06-07
+archived_at: 2026-06-07T15:21:26Z
 ---
 
 ## Notes

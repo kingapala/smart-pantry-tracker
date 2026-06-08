@@ -212,31 +212,31 @@ Use `class={cn(...)}` syntax — `class:list` is the Astro-native alternative bu
 
 #### Automated
 
-- [ ] 1.1 `npm run lint` passes with no new errors
-- [ ] 1.2 `npx astro sync` completes without type errors
+- [x] 1.1 `npm run lint` passes with no new errors — fd7584e
+- [x] 1.2 `npx astro sync` completes without type errors — fd7584e
 
 #### Manual
 
-- [ ] 1.3 `/inventory` shows Expiry column header as a clickable "Expiry ↑" sort link
-- [ ] 1.4 Clicking the sort link navigates to `?sort=expiry` and rows are ordered by expiry date ascending
-- [ ] 1.5 Products with no expiry date appear at the bottom when sort is active
-- [ ] 1.6 A `×` reset link appears next to "Expiry ↑" when `?sort=expiry` is in the URL
-- [ ] 1.7 Clicking `×` returns to `/inventory` with default creation-date order
-- [ ] 1.8 Browser Back from edit page preserves `?sort=expiry`
+- [x] 1.3 `/inventory` shows Expiry column header as a clickable "Expiry ↑" sort link — fd7584e
+- [x] 1.4 Clicking the sort link navigates to `?sort=expiry` and rows are ordered by expiry date ascending — fd7584e
+- [x] 1.5 Products with no expiry date appear at the bottom when sort is active — fd7584e
+- [x] 1.6 A `×` reset link appears next to "Expiry ↑" when `?sort=expiry` is in the URL — fd7584e
+- [x] 1.7 Clicking `×` returns to `/inventory` with default creation-date order — fd7584e
+- [x] 1.8 Browser Back from edit page preserves `?sort=expiry` — fd7584e
 
 ### Phase 2: Expiry Highlighting
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` passes with no new errors
-- [ ] 2.2 `npx astro sync` completes without type errors
+- [x] 2.1 `npm run lint` passes with no new errors — 4685b52
+- [x] 2.2 `npx astro sync` completes without type errors — 4685b52
 
 #### Manual
 
-- [ ] 2.3 Product with `expiry_date` = today shows red row and red date text
-- [ ] 2.4 Product with `expiry_date` = yesterday shows red row and red date text
-- [ ] 2.5 Product with `expiry_date` = today+1 to today+3 shows amber row and amber date text
-- [ ] 2.6 Product with `expiry_date` = today+4 or later shows neutral row
-- [ ] 2.7 Product with no expiry date shows neutral row
-- [ ] 2.8 Highlighting works correctly in both default and `?sort=expiry` order
-- [ ] 2.9 No regression in add, edit, and delete flows
+- [x] 2.3 Product with `expiry_date` = today shows red row and red date text — 4685b52
+- [x] 2.4 Product with `expiry_date` = yesterday shows red row and red date text — 4685b52
+- [x] 2.5 Product with `expiry_date` = today+1 to today+3 shows amber row and amber date text — 4685b52
+- [x] 2.6 Product with `expiry_date` = today+4 or later shows neutral row — 4685b52
+- [x] 2.7 Product with no expiry date shows neutral row — 4685b52
+- [x] 2.8 Highlighting works correctly in both default and `?sort=expiry` order — 4685b52
+- [x] 2.9 No regression in add, edit, and delete flows — 4685b52

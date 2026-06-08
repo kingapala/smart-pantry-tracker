@@ -2,7 +2,8 @@
 import Layout from "@/layouts/Layout.astro";
 import Topbar from "@/components/Topbar.astro";
 import { createClient } from "@/lib/supabase";
-import { formatDateDisplay } from "@/lib/date";
+import { formatDateDisplay, nowUTC } from "@/lib/date";
+import { cn } from "@/lib/utils";
 
 interface Product {
   id: string;
@@ -15,13 +16,18 @@ interface Product {
 }
 
 const { user } = Astro.locals;
+const todayStr = nowUTC().slice(0, 10);
+const soonDate = new Date(nowUTC());
+soonDate.setUTCDate(soonDate.getUTCDate() + 3);
+const soonStr = soonDate.toISOString().slice(0, 10);
+const sortParam = Astro.url.searchParams.get("sort");
 const supabase = createClient(Astro.request.headers, Astro.cookies);
 let products: Product[] = [];
 if (user && supabase) {
-  const { data, error: listError } = await supabase
-    .from("products")
-    .select("*")
-    .order("created_at", { ascending: true });
+  const { data, error: listError } =
+    sortParam === "expiry"
+      ? await supabase.from("products").select("*").order("expiry_date", { ascending: true, nullsFirst: false })
+      : await supabase.from("products").select("*").order("created_at", { ascending: true });
   if (listError) {
     return Astro.redirect(`/inventory?error=${encodeURIComponent(listError.message)}`);
   }
@@ -80,14 +86,36 @@ const error = rawError
                   <th class="px-4 py-3 font-medium">Name</th>
                   <th class="px-4 py-3 font-medium">Qty</th>
                   <th class="px-4 py-3 font-medium">Min</th>
-                  <th class="px-4 py-3 font-medium">Expiry</th>
+                  <th class="px-4 py-3 font-medium">
+                    {sortParam === "expiry" ? (
+                      <span>
+                        Expiry ↑{" "}
+                        <a href="/inventory" aria-label="Clear expiry sort" class="ml-1 opacity-60 hover:opacity-100">
+                          ×
+                        </a>
+                      </span>
+                    ) : (
+                      <a href="?sort=expiry" class="hover:underline">
+                        Expiry ↑
+                      </a>
+                    )}
+                  </th>
                   <th class="px-4 py-3 font-medium">On list</th>
                   <th class="px-4 py-3" />
                 </tr>
               </thead>
               <tbody>
                 {products.map((p) => (
-                  <tr class="border-b border-white/5 last:border-0 hover:bg-white/5">
+                  <tr
+                    class={cn(
+                      "border-b last:border-0",
+                      p.expiry_date !== null && p.expiry_date <= todayStr
+                        ? "border-red-500/20 bg-red-500/10 hover:bg-red-500/20"
+                        : p.expiry_date !== null && p.expiry_date > todayStr && p.expiry_date <= soonStr
+                          ? "border-amber-500/20 bg-amber-500/10 hover:bg-amber-500/20"
+                          : "border-white/5 hover:bg-white/5",
+                    )}
+                  >
                     <td class="px-4 py-3 font-medium">{p.name}</td>
                     <td class="px-4 py-3 text-blue-100/80">
                       {p.quantity} {p.unit}
@@ -95,7 +123,18 @@ const error = rawError
                     <td class="px-4 py-3 text-blue-100/80">
                       {p.min_threshold} {p.unit}
                     </td>
-                    <td class="px-4 py-3 text-blue-100/80">{p.expiry_date ? formatDateDisplay(p.expiry_date) : "—"}</td>
+                    <td
+                      class={cn(
+                        "px-4 py-3",
+                        p.expiry_date !== null && p.expiry_date <= todayStr
+                          ? "font-medium text-red-400"
+                          : p.expiry_date !== null && p.expiry_date > todayStr && p.expiry_date <= soonStr
+                            ? "font-medium text-amber-400"
+                            : "text-blue-100/80",
+                      )}
+                    >
+                      {p.expiry_date ? formatDateDisplay(p.expiry_date) : "—"}
+                    </td>
                     <td class="px-4 py-3 text-center">
                       {p.add_to_list ? (
                         <span class="text-xs text-green-400">✓</span>

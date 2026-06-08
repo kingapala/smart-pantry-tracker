@@ -3,7 +3,7 @@ project: "Smart Pantry Tracker"
 version: 1
 status: draft
 created: 2026-05-26
-updated: 2026-06-07
+updated: 2026-06-08
 prd_version: 1
 main_goal: speed
 top_blocker: capacity
@@ -33,7 +33,7 @@ Smart Pantry Tracker addresses a structural problem: every existing tracking mec
 | S-01 | auth-completion            | sign out and request a password reset via email                                          | —             | FR-001, FR-002, FR-003, FR-013                | done     |
 | S-02 | inventory-crud             | add, view, edit, and delete products in their inventory through a web interface          | F-01          | FR-004–FR-007, US-01, NFR: UI feedback + a11y | done     |
 | S-04 | shopping-list-core         | view the auto-generated shopping list; list updates when qty drops below threshold       | F-01, S-02    | FR-010, FR-011, US-01                         | done     |
-| S-03 | inventory-expiry-and-sort  | see expired products highlighted in red and sort inventory by expiry date                | S-02          | FR-008, FR-009                                | proposed |
+| S-03 | inventory-expiry-and-sort  | see expired products highlighted in red and sort inventory by expiry date                | S-02          | FR-008, FR-009                                | done |
 | S-05 | shopping-list-complete     | check off a shopping list item with qty purchased and manually add one-off items         | S-04          | FR-012, FR-014                                | proposed |
 
 ## Streams
@@ -126,7 +126,7 @@ Foundations below assume these are present and do NOT re-scaffold them.
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** FR-009 requires session-persistent sort state; in Astro SSR the simplest mechanism is a URL query parameter (`?sort=expiry`), which survives navigation without additional machinery. Cookie or server-session approaches would work but add complexity inconsistent with the `speed` goal.
-- **Status:** proposed
+- **Status:** done
 
 ---
 
@@ -170,3 +170,4 @@ None. All PRD questions were resolved inline during the shaping and Socrates rou
 - **S-01: User can sign out and request a password reset via email** — Archived 2026-06-05 → `context/archive/2026-06-04-auth-completion/`. Lesson: —.
 - **S-02: add, view, edit, and delete products in their inventory through a web interface** — Archived 2026-06-05 → `context/archive/2026-06-05-inventory-crud/`. Lesson: —.
 - **S-04: view the auto-generated shopping list; list updates when qty drops below threshold** — Archived 2026-06-07 → `context/archive/2026-06-05-shopping-list-core/`. Lesson: —.
+- **S-03: see expired products highlighted in red and sort their inventory by expiry date; the sort order persists across navigation within the session** — Archived 2026-06-08 → `context/archive/2026-06-04-inventory-expiry-and-sort/`. Lesson: —.

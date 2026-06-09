@@ -131,24 +131,37 @@ const error = rawError
                     </td>
                     <td class="px-4 py-3">
                       <div class="flex justify-end gap-2">
-                        {item.type === "pantry" && (
-                          <a
-                            href={`/inventory/${item.id}/edit`}
-                            aria-label={`Edit ${item.name}`}
-                            class="rounded border border-white/20 px-2 py-1 text-xs hover:bg-white/10"
+                        {item.type === "pantry" ? (
+                          <Fragment>
+                            <a
+                              href={`/inventory/${item.id}/edit`}
+                              aria-label={`Edit ${item.name}`}
+                              class="rounded border border-white/20 px-2 py-1 text-xs hover:bg-white/10"
+                            >
+                              Edit
+                            </a>
+                            <button
+                              class="checkoff-trigger rounded border border-green-400/30 px-2 py-1 text-xs text-green-400 hover:bg-green-400/10"
+                              data-item-id={item.id}
+                              data-item-name={item.name}
+                              data-buy-amount={item.buy}
+                              data-unit={item.unit}
+                              aria-label={`Check off ${item.name}`}
+                            >
+                              Check off
+                            </button>
+                          </Fragment>
+                        ) : (
+                          <button
+                            class="delete-trigger rounded border border-red-400/30 px-2 py-1 text-xs text-red-400 hover:bg-red-400/10"
+                            data-item-id={item.id}
+                            data-item-name={item.name}
+                            data-item-type={item.type}
+                            aria-label={`Delete ${item.name}`}
                           >
-                            Edit
-                          </a>
+                            Delete
+                          </button>
                         )}
-                        <button
-                          class="delete-trigger rounded border border-red-400/30 px-2 py-1 text-xs text-red-400 hover:bg-red-400/10"
-                          data-item-id={item.id}
-                          data-item-name={item.name}
-                          data-item-type={item.type}
-                          aria-label={`Delete ${item.name}`}
-                        >
-                          Delete
-                        </button>
                       </div>
                     </td>
                   </tr>
@@ -186,6 +199,43 @@ const error = rawError
       </button>
     </div>
   </dialog>
+
+  <!-- Pantry check-off dialog -->
+  <dialog
+    id="checkoff-dialog"
+    aria-labelledby="checkoff-dialog-title"
+    class="w-full max-w-sm rounded-2xl border border-white/10 bg-gray-900 p-6 text-white shadow-xl backdrop:bg-black/50"
+  >
+    <h2 id="checkoff-dialog-title" class="mb-2 text-lg font-semibold">How much did you buy?</h2>
+    <p class="mb-4 text-sm text-blue-100/70">
+      Record how much <strong id="checkoff-dialog-name"></strong> you bought — your inventory will update by that amount.
+    </p>
+    <div class="mb-6">
+      <label for="checkoff-qty" class="mb-1 block text-sm text-blue-100/80">Quantity purchased</label>
+      <input
+        id="checkoff-qty"
+        name="qty_purchased"
+        type="number"
+        min="0.01"
+        step="any"
+        class="w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/30 focus:ring-2 focus:ring-purple-400 focus:outline-none"
+      />
+    </div>
+    <div class="flex gap-3">
+      <button
+        id="checkoff-cancel"
+        class="flex-1 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20"
+      >
+        Cancel
+      </button>
+      <button
+        id="checkoff-confirm"
+        class="flex-1 rounded-lg bg-purple-500 px-4 py-2 text-sm font-medium transition-colors hover:bg-purple-600"
+      >
+        Confirm
+      </button>
+    </div>
+  </dialog>
 </Layout>
 
 <script>
@@ -194,14 +244,12 @@ const error = rawError
   const cancelBtn = document.getElementById("delete-cancel");
   const confirmBtn = document.getElementById("delete-confirm");
   let pendingId: string | null = null;
-  let pendingType: string | null = null;
   let pendingTrigger: HTMLButtonElement | null = null;
 
   document.querySelectorAll<HTMLButtonElement>(".delete-trigger").forEach((btn) => {
     btn.addEventListener("click", () => {
       pendingTrigger = btn;
       pendingId = btn.dataset.itemId ?? null;
-      pendingType = btn.dataset.itemType ?? null;
       if (nameEl) nameEl.textContent = btn.dataset.itemName ?? "";
       dialog?.showModal();
     });
@@ -210,7 +258,6 @@ const error = rawError
   cancelBtn?.addEventListener("click", () => {
     dialog?.close();
     pendingId = null;
-    pendingType = null;
   });
 
   dialog?.addEventListener("click", (e) => {
@@ -221,16 +268,65 @@ const error = rawError
     pendingTrigger?.focus();
     pendingTrigger = null;
     pendingId = null;
-    pendingType = null;
   });
 
   confirmBtn?.addEventListener("click", async () => {
-    if (!pendingId || !pendingType) return;
+    if (!pendingId) return;
     const id = pendingId;
-    const type = pendingType;
     dialog?.close();
-    const endpoint = type === "manual" ? `/api/shopping-list-items/${id}` : `/api/products/${id}`;
-    const response = await fetch(endpoint, { method: "DELETE" });
+    const response = await fetch(`/api/shopping-list-items/${id}`, { method: "DELETE" });
+    if (response.ok) {
+      window.location.href = "/shopping-list";
+    } else {
+      const errorMsg = await response.text();
+      window.location.href = `/shopping-list?error=${encodeURIComponent(errorMsg)}`;
+    }
+  });
+
+  const checkoffDialog = document.getElementById("checkoff-dialog") as HTMLDialogElement | null;
+  const checkoffNameEl = document.getElementById("checkoff-dialog-name");
+  const checkoffQtyInput = document.getElementById("checkoff-qty") as HTMLInputElement | null;
+  const checkoffCancelBtn = document.getElementById("checkoff-cancel");
+  const checkoffConfirmBtn = document.getElementById("checkoff-confirm");
+  let checkoffPendingId: string | null = null;
+  let checkoffPendingTrigger: HTMLButtonElement | null = null;
+
+  document.querySelectorAll<HTMLButtonElement>(".checkoff-trigger").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      checkoffPendingTrigger = btn;
+      checkoffPendingId = btn.dataset.itemId ?? null;
+      if (checkoffNameEl) checkoffNameEl.textContent = btn.dataset.itemName ?? "";
+      if (checkoffQtyInput) {
+        checkoffQtyInput.value = "";
+        checkoffQtyInput.placeholder = `Suggested: ${btn.dataset.buyAmount ?? ""} ${btn.dataset.unit ?? ""}`;
+      }
+      checkoffDialog?.showModal();
+    });
+  });
+
+  checkoffCancelBtn?.addEventListener("click", () => {
+    checkoffDialog?.close();
+    checkoffPendingId = null;
+  });
+
+  checkoffDialog?.addEventListener("click", (e) => {
+    if (e.target === checkoffDialog) checkoffDialog.close();
+  });
+
+  checkoffDialog?.addEventListener("close", () => {
+    checkoffPendingTrigger?.focus();
+    checkoffPendingTrigger = null;
+    checkoffPendingId = null;
+  });
+
+  checkoffConfirmBtn?.addEventListener("click", async () => {
+    if (!checkoffPendingId || !checkoffQtyInput) return;
+    const id = checkoffPendingId;
+    const qtyPurchased = checkoffQtyInput.value;
+    checkoffDialog?.close();
+    const formData = new FormData();
+    formData.set("qty_purchased", qtyPurchased);
+    const response = await fetch(`/api/products/${id}/checkoff`, { method: "POST", body: formData });
     if (response.ok) {
       window.location.href = "/shopping-list";
     } else {

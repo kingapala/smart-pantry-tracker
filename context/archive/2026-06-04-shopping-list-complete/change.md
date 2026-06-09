@@ -1,11 +1,11 @@
 ---
 change_id: shopping-list-complete
 title: Shopping list check-off with qty purchased and manual one-off items
-status: impl_reviewed
+status: archived
 created: 2026-06-04
 updated: 2026-06-09
 reviewed: 2026-06-09
-archived_at: null
+archived_at: 2026-06-09T11:05:36Z
 ---
 
 ## Notes

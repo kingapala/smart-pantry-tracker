@@ -177,32 +177,32 @@ None — no schema changes. `products.quantity` already supports the write this 
 
 #### Automated
 
-- [x] 1.1 `npm run lint` passes with no new errors
-- [x] 1.2 `npx astro sync` completes without type errors
+- [x] 1.1 `npm run lint` passes with no new errors — a962154
+- [x] 1.2 `npx astro sync` completes without type errors — a962154
 
 #### Manual
 
-- [ ] 1.3 `/shopping-list` shows a "Check off" button (not "Delete") on every pantry-linked row; "Edit" remains
-- [ ] 1.4 Clicking "Check off" on a pantry row opens a dialog showing the item name and a placeholder hint with the suggested "Buy" amount and unit, with an empty input
-- [ ] 1.5 Entering a quantity equal to (or greater than) the "Buy" gap and confirming: the row disappears from `/shopping-list`, and `/inventory` shows the product's quantity increased by the entered amount
-- [ ] 1.6 Entering a quantity smaller than the "Buy" gap and confirming: the row remains on `/shopping-list` with a recomputed (smaller) "Buy" gap, and `/inventory` shows the partial increase
-- [ ] 1.7 Cancelling the dialog closes it without changing inventory and returns focus to the trigger button
-- [ ] 1.8 A failed submission surfaces the error via the `?error=` banner on `/shopping-list`, matching the existing error-display pattern
-- [ ] 1.9 No regression in Edit, in manual-item Delete (still functioning as before until Phase 2), or in the auto-derivation of the list itself
+- [x] 1.3 `/shopping-list` shows a "Check off" button (not "Delete") on every pantry-linked row; "Edit" remains — a962154
+- [x] 1.4 Clicking "Check off" on a pantry row opens a dialog showing the item name and a placeholder hint with the suggested "Buy" amount and unit, with an empty input — a962154
+- [x] 1.5 Entering a quantity equal to (or greater than) the "Buy" gap and confirming: the row disappears from `/shopping-list`, and `/inventory` shows the product's quantity increased by the entered amount — a962154
+- [x] 1.6 Entering a quantity smaller than the "Buy" gap and confirming: the row remains on `/shopping-list` with a recomputed (smaller) "Buy" gap, and `/inventory` shows the partial increase — a962154
+- [x] 1.7 Cancelling the dialog closes it without changing inventory and returns focus to the trigger button — a962154
+- [x] 1.8 A failed submission surfaces the error via the `?error=` banner on `/shopping-list`, matching the existing error-display pattern — a962154
+- [x] 1.9 No regression in Edit, in manual-item Delete (still functioning as before until Phase 2), or in the auto-derivation of the list itself — a962154
 
 ### Phase 2: Manual Item Check-Off
 
 #### Automated
 
-- [ ] 2.1 `npm run lint` passes with no new errors
-- [ ] 2.2 `npx astro sync` completes without type errors
+- [x] 2.1 `npm run lint` passes with no new errors
+- [x] 2.2 `npx astro sync` completes without type errors
 
 #### Manual
 
-- [ ] 2.3 `/shopping-list` shows "Check off" (not "Delete") on every manual-item row
-- [ ] 2.4 Clicking "Check off" on a manual row opens a dialog with "Mark as bought?"-style wording naming the item
-- [ ] 2.5 Confirming removes the item from `/shopping-list` and it does not reappear on reload
-- [ ] 2.6 Cancelling closes the dialog without removing the item and returns focus to the trigger button
-- [ ] 2.7 A failed removal surfaces the error via the `?error=` banner, matching the existing pattern
-- [ ] 2.8 Pantry-row "Check off" continues to work correctly alongside the relabeled manual-row "Check off" — both dialogs are independently reachable and don't interfere with each other
-- [ ] 2.9 No regression in adding manual items via `/shopping-list/new`
+- [x] 2.3 `/shopping-list` shows "Check off" (not "Delete") on every manual-item row
+- [x] 2.4 Clicking "Check off" on a manual row opens a dialog with "Mark as bought?"-style wording naming the item
+- [x] 2.5 Confirming removes the item from `/shopping-list` and it does not reappear on reload
+- [x] 2.6 Cancelling closes the dialog without removing the item and returns focus to the trigger button
+- [x] 2.7 A failed removal surfaces the error via the `?error=` banner, matching the existing pattern
+- [x] 2.8 Pantry-row "Check off" continues to work correctly alongside the relabeled manual-row "Check off" — both dialogs are independently reachable and don't interfere with each other
+- [x] 2.9 No regression in adding manual items via `/shopping-list/new`

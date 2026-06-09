@@ -35,6 +35,7 @@ if (user && supabase) {
     supabase
       .from("products")
       .select("id, name, quantity, unit, min_threshold")
+      .eq("user_id", user.id)
       .eq("add_to_list", true)
       .order("name", { ascending: true }),
     supabase.from("shopping_list_items").select("id, name, quantity, unit").order("name", { ascending: true }),
@@ -578,7 +579,6 @@ const error = rawError
       checkoffConversionMsg.textContent = "";
       checkoffConversionMsg.className = "hidden text-xs";
     }
-    if (checkoffConfirmBtn) checkoffConfirmBtn.disabled = false;
     if (checkoffExpiryInput) checkoffExpiryInput.value = "";
     if (checkoffAddToListCheckbox) checkoffAddToListCheckbox.checked = false;
     checkoffThresholdRow?.classList.add("hidden");

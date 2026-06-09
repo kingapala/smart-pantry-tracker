@@ -22,6 +22,20 @@ export const PATCH: APIRoute = async (context) => {
     return new Response("name, quantity and unit are required", { status: 400 });
   }
 
+  const existsResult = await supabase
+    .from("shopping_list_items")
+    .select("id")
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (existsResult.error) {
+    return new Response(existsResult.error.message, { status: 500 });
+  }
+  if (!existsResult.data) {
+    return new Response("Item not found", { status: 404 });
+  }
+
   const { error } = await supabase
     .from("shopping_list_items")
     .update({ name, quantity, unit })

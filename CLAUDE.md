@@ -42,6 +42,8 @@ All pages are server-rendered (`output: "server"` in [astro.config.mjs](astro.co
 
 **API routes communicate errors via URL query params**, not JSON. On error, routes redirect back to the form page with `?error=<encoded-message>` appended; pages read `Astro.url.searchParams.get("error")` to surface it. See [src/pages/api/auth/signin.ts](src/pages/api/auth/signin.ts) as the canonical example.
 
+**Fetch-driven API routes return 401 on missing auth**, not a redirect. Routes called via `fetch()` (never navigated to directly) should return `new Response("Unauthorized", { status: 401 })` when `context.locals.user` is absent. Form-submission routes (navigated via `<form action="...">`) may redirect to `/auth/signin` instead. The distinction matters because `fetch()` treats any 2xx/3xx as `response.ok = true`, so a redirect would silently appear successful to the client script.
+
 **All dates are UTC; use `formatDate()` / `nowUTC()` from `@/lib/date.ts`**, never bare `new Date().toISOString()`, `toLocaleDateString()`, or any implicit-timezone call. For UI display use `formatDateDisplay()` from the same module — it always passes `timeZone: "UTC"` to `Intl.DateTimeFormat` so the rendered date cannot shift based on the server's or user's locale.
 
 ## Business Logic
@@ -64,17 +66,17 @@ The lesson focus is safe throughput: isolated contexts, choosing the right execu
 
 ### Task Router - Where to start
 
-| Skill | Use it when |
-| --- | --- |
-| **Code isolation** | |
-| `git worktree add` | You need a separate working directory for a parallel change. One change per worktree, one fresh agent context per worktree. |
-| **Complex changes** | |
-| `/10x-implement <change-id> phase <n>` | The change has multiple phases, needs manual gates, or benefits from interactive decision-making during execution. |
-| **Simple changes** | |
-| `/goal` | You have a clear, bounded task and want goal-directed delegation. The agent works autonomously toward the stated goal with a stop condition. |
-| `claude -p` | You want headless execution for a well-defined task. The Ralph Wiggum loop (run, check, retry) is the universal autonomous pattern. |
-| **Multi-session orchestration** | |
-| Superset / Conductor / Antigravity / VS Code Agent View | You are running multiple agent sessions in parallel and need visibility, coordination, or session management across them. |
+| Skill                                                   | Use it when                                                                                                                                  |
+| ------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Code isolation**                                      |                                                                                                                                              |
+| `git worktree add`                                      | You need a separate working directory for a parallel change. One change per worktree, one fresh agent context per worktree.                  |
+| **Complex changes**                                     |                                                                                                                                              |
+| `/10x-implement <change-id> phase <n>`                  | The change has multiple phases, needs manual gates, or benefits from interactive decision-making during execution.                           |
+| **Simple changes**                                      |                                                                                                                                              |
+| `/goal`                                                 | You have a clear, bounded task and want goal-directed delegation. The agent works autonomously toward the stated goal with a stop condition. |
+| `claude -p`                                             | You want headless execution for a well-defined task. The Ralph Wiggum loop (run, check, retry) is the universal autonomous pattern.          |
+| **Multi-session orchestration**                         |                                                                                                                                              |
+| Superset / Conductor / Antigravity / VS Code Agent View | You are running multiple agent sessions in parallel and need visibility, coordination, or session management across them.                    |
 
 ### Parallel work rules
 

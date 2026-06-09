@@ -16,6 +16,9 @@ export const POST: APIRoute = async (context) => {
   const id = context.params.id;
   const form = await context.request.formData();
   const qtyPurchased = parseFloat((form.get("qty_purchased") ?? "0") as string);
+  if (isNaN(qtyPurchased) || qtyPurchased <= 0) {
+    return new Response("qty_purchased must be > 0", { status: 400 });
+  }
   const qtyUnit = ((form.get("qty_unit") ?? "") as string).trim();
   const expiryDateStr = (form.get("expiry_date") as string | null) ?? "";
   const addToList = form.has("add_to_list");
@@ -41,7 +44,7 @@ export const POST: APIRoute = async (context) => {
   const existingResult = await supabase
     .from("products")
     .select("id, quantity, unit")
-    .eq("name", name)
+    .ilike("name", name)
     .eq("user_id", user.id)
     .maybeSingle();
 

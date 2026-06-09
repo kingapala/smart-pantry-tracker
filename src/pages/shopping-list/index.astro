@@ -131,15 +131,17 @@ const error = rawError
                     </td>
                     <td class="px-4 py-3">
                       <div class="flex justify-end gap-2">
-                        {item.type === "pantry" && (
-                          <a
-                            href={`/inventory/${item.id}/edit`}
-                            aria-label={`Edit ${item.name}`}
-                            class="rounded border border-white/20 px-2 py-1 text-xs hover:bg-white/10"
-                          >
-                            Edit
-                          </a>
-                        )}
+                        <button
+                          class="edit-trigger rounded border border-white/20 px-2 py-1 text-xs hover:bg-white/10"
+                          data-item-id={item.id}
+                          data-item-name={item.name}
+                          data-item-type={item.type}
+                          data-item-buy={item.buy}
+                          data-item-unit={item.unit}
+                          aria-label={`Edit ${item.name}`}
+                        >
+                          Edit
+                        </button>
                         <button
                           class="checkoff-trigger rounded border border-green-400/30 px-2 py-1 text-xs text-green-400 hover:bg-green-400/10"
                           data-item-id={item.id}
@@ -171,6 +173,64 @@ const error = rawError
       }
     </div>
   </div>
+
+  <!-- Edit dialog (both pantry + manual) -->
+  <dialog
+    id="edit-dialog"
+    aria-labelledby="edit-dialog-title"
+    class="w-full max-w-sm rounded-2xl border border-white/10 bg-gray-900 p-6 text-white shadow-xl backdrop:bg-black/50"
+  >
+    <h2 id="edit-dialog-title" class="mb-4 text-lg font-semibold">
+      Edit: <span id="edit-dialog-name"></span>
+    </h2>
+    <div class="space-y-3">
+      <div>
+        <label for="edit-name" class="mb-1 block text-sm text-blue-100/80">Name *</label>
+        <input
+          id="edit-name"
+          type="text"
+          required
+          class="w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/30 focus:ring-2 focus:ring-purple-400 focus:outline-none"
+        />
+      </div>
+      <div class="flex gap-3">
+        <div class="flex-1">
+          <label for="edit-qty" class="mb-1 block text-sm text-blue-100/80">How many to buy *</label>
+          <input
+            id="edit-qty"
+            type="number"
+            min="0.01"
+            step="any"
+            required
+            class="w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/30 focus:ring-2 focus:ring-purple-400 focus:outline-none"
+          />
+        </div>
+        <div class="flex-1">
+          <label for="edit-unit" class="mb-1 block text-sm text-blue-100/80">Unit *</label>
+          <input
+            id="edit-unit"
+            type="text"
+            required
+            class="w-full rounded-lg border border-white/20 bg-white/10 px-3 py-2 text-white placeholder-white/30 focus:ring-2 focus:ring-purple-400 focus:outline-none"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="mt-6 flex gap-3">
+      <button
+        id="edit-cancel"
+        class="flex-1 rounded-lg border border-white/20 bg-white/10 px-4 py-2 text-sm transition-colors hover:bg-white/20"
+      >
+        Cancel
+      </button>
+      <button
+        id="edit-confirm"
+        class="flex-1 rounded-lg bg-purple-500 px-4 py-2 text-sm font-medium transition-colors hover:bg-purple-600 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        Save
+      </button>
+    </div>
+  </dialog>
 
   <!-- Delete confirmation dialog (both pantry + manual) -->
   <dialog
@@ -277,6 +337,85 @@ const error = rawError
 
 <script>
   import { convertUnit } from "@/lib/units";
+
+  // ── Edit dialog ────────────────────────────────────────────────────
+  const editDialog = document.getElementById("edit-dialog") as HTMLDialogElement | null;
+  const editDialogNameEl = document.getElementById("edit-dialog-name");
+  const editNameInput = document.getElementById("edit-name") as HTMLInputElement | null;
+  const editQtyInput = document.getElementById("edit-qty") as HTMLInputElement | null;
+  const editUnitInput = document.getElementById("edit-unit") as HTMLInputElement | null;
+  const editCancelBtn = document.getElementById("edit-cancel");
+  const editConfirmBtn = document.getElementById("edit-confirm") as HTMLButtonElement | null;
+  let editPendingId: string | null = null;
+  let editPendingType: string | null = null;
+  let editPendingTrigger: HTMLButtonElement | null = null;
+
+  function updateEditConfirmState() {
+    if (!editConfirmBtn || !editNameInput || !editQtyInput || !editUnitInput) return;
+    const nameOk = editNameInput.value.trim().length > 0;
+    const qtyOk = parseFloat(editQtyInput.value) > 0;
+    const unitOk = editUnitInput.value.trim().length > 0;
+    editConfirmBtn.disabled = !(nameOk && qtyOk && unitOk);
+  }
+
+  editNameInput?.addEventListener("input", updateEditConfirmState);
+  editQtyInput?.addEventListener("input", updateEditConfirmState);
+  editUnitInput?.addEventListener("input", updateEditConfirmState);
+
+  document.querySelectorAll<HTMLButtonElement>(".edit-trigger").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      editPendingTrigger = btn;
+      editPendingId = btn.dataset.itemId ?? null;
+      editPendingType = btn.dataset.itemType ?? null;
+      if (editDialogNameEl) editDialogNameEl.textContent = btn.dataset.itemName ?? "";
+      if (editNameInput) editNameInput.value = btn.dataset.itemName ?? "";
+      if (editQtyInput) editQtyInput.value = btn.dataset.itemBuy ?? "";
+      if (editUnitInput) editUnitInput.value = btn.dataset.itemUnit ?? "";
+      updateEditConfirmState();
+      editDialog?.showModal();
+    });
+  });
+
+  editCancelBtn?.addEventListener("click", () => {
+    editDialog?.close();
+  });
+
+  editDialog?.addEventListener("click", (e) => {
+    if (e.target === editDialog) editDialog.close();
+  });
+
+  editDialog?.addEventListener("close", () => {
+    editPendingTrigger?.focus();
+    editPendingTrigger = null;
+    editPendingId = null;
+    editPendingType = null;
+  });
+
+  editConfirmBtn?.addEventListener("click", async () => {
+    if (!editPendingId || !editNameInput || !editQtyInput || !editUnitInput) return;
+    const id = editPendingId;
+    const type = editPendingType;
+    const formData = new FormData();
+    formData.set("name", editNameInput.value.trim());
+    formData.set("unit", editUnitInput.value.trim());
+    editDialog?.close();
+
+    let response: Response;
+    if (type === "pantry") {
+      formData.set("buy", editQtyInput.value);
+      response = await fetch(`/api/products/${id}/listing`, { method: "PATCH", body: formData });
+    } else {
+      formData.set("quantity", editQtyInput.value);
+      response = await fetch(`/api/shopping-list-items/${id}`, { method: "PATCH", body: formData });
+    }
+
+    if (response.ok) {
+      window.location.href = "/shopping-list";
+    } else {
+      const errorMsg = await response.text();
+      window.location.href = `/shopping-list?error=${encodeURIComponent(errorMsg)}`;
+    }
+  });
 
   // ── Delete dialog ──────────────────────────────────────────────────
   const deleteDialog = document.getElementById("delete-dialog") as HTMLDialogElement | null;

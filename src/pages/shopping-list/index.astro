@@ -356,14 +356,20 @@ const error = rawError
     const entered = checkoffUnitInput.value.trim();
     const target = checkoffPendingItemUnit;
 
-    const hide = () => {
+    const clearMsg = () => {
       checkoffConversionMsg.textContent = "";
       checkoffConversionMsg.className = "hidden text-xs";
-      if (checkoffConfirmBtn) checkoffConfirmBtn.disabled = false;
     };
 
-    if (!entered || isNaN(qty) || !target || entered.toLowerCase() === target.toLowerCase()) {
-      hide();
+    if (!entered || isNaN(qty) || qty <= 0) {
+      clearMsg();
+      if (checkoffConfirmBtn) checkoffConfirmBtn.disabled = true;
+      return;
+    }
+
+    if (!target || entered.toLowerCase() === target.toLowerCase()) {
+      clearMsg();
+      if (checkoffConfirmBtn) checkoffConfirmBtn.disabled = false;
       return;
     }
 
@@ -408,6 +414,7 @@ const error = rawError
         checkoffConversionMsg.textContent = "";
         checkoffConversionMsg.className = "hidden text-xs";
       }
+      if (checkoffConfirmBtn) checkoffConfirmBtn.disabled = true;
       checkoffDialog?.showModal();
     });
   });

@@ -194,15 +194,15 @@ None — no schema changes. `products.quantity` already supports the write this 
 
 #### Automated
 
-- [x] 2.1 `npm run lint` passes with no new errors
-- [x] 2.2 `npx astro sync` completes without type errors
+- [x] 2.1 `npm run lint` passes with no new errors — a71dc6d
+- [x] 2.2 `npx astro sync` completes without type errors — a71dc6d
 
 #### Manual
 
-- [x] 2.3 `/shopping-list` shows "Check off" (not "Delete") on every manual-item row
-- [x] 2.4 Clicking "Check off" on a manual row opens a dialog with "Mark as bought?"-style wording naming the item
-- [x] 2.5 Confirming removes the item from `/shopping-list` and it does not reappear on reload
-- [x] 2.6 Cancelling closes the dialog without removing the item and returns focus to the trigger button
-- [x] 2.7 A failed removal surfaces the error via the `?error=` banner, matching the existing pattern
-- [x] 2.8 Pantry-row "Check off" continues to work correctly alongside the relabeled manual-row "Check off" — both dialogs are independently reachable and don't interfere with each other
-- [x] 2.9 No regression in adding manual items via `/shopping-list/new`
+- [x] 2.3 `/shopping-list` shows "Check off" (not "Delete") on every manual-item row — a71dc6d
+- [x] 2.4 Clicking "Check off" on a manual row opens a dialog with "Mark as bought?"-style wording naming the item — a71dc6d
+- [x] 2.5 Confirming removes the item from `/shopping-list` and it does not reappear on reload — a71dc6d
+- [x] 2.6 Cancelling closes the dialog without removing the item and returns focus to the trigger button — a71dc6d
+- [x] 2.7 A failed removal surfaces the error via the `?error=` banner, matching the existing pattern — a71dc6d
+- [x] 2.8 Pantry-row "Check off" continues to work correctly alongside the relabeled manual-row "Check off" — both dialogs are independently reachable and don't interfere with each other — a71dc6d
+- [x] 2.9 No regression in adding manual items via `/shopping-list/new` — a71dc6d

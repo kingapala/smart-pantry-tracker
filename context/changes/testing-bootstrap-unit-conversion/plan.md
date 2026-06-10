@@ -476,9 +476,9 @@ None — no schema changes.
 #### Automated
 
 - [x] 3.1 `npx prettier --write context/foundation/test-plan.md` produces no
-      diff beyond the intended §6.1/§6.5 edits
+      diff beyond the intended §6.1/§6.5 edits — 3eeb786
 
 #### Manual
 
 - [x] 3.2 §6.1 and §6.5 read coherently alongside §6's remaining "TBD"
-      placeholders for later phases
+      placeholders for later phases — 3eeb786

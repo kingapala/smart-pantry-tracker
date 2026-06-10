@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { convertUnit } from "./units";
+import { convertUnit, isKnownUnit } from "./units";
 
 describe("convertUnit", () => {
   describe("metric conversions (real-world facts, exact)", () => {
@@ -96,5 +96,20 @@ describe("convertUnit", () => {
     it("does not collapse internal whitespace ('Fl  Oz' with a double space is unrecognized)", () => {
       expect(convertUnit(1, "Fl  Oz", "ml")).toBeNull();
     });
+  });
+});
+
+describe("isKnownUnit", () => {
+  it("recognizes a known unit", () => {
+    expect(isKnownUnit("kg")).toBe(true);
+  });
+
+  it("recognizes a known unit regardless of case and surrounding whitespace", () => {
+    expect(isKnownUnit("KG")).toBe(true);
+    expect(isKnownUnit(" g ")).toBe(true);
+  });
+
+  it("returns false for an unrecognized unit", () => {
+    expect(isKnownUnit("banana")).toBe(false);
   });
 });

@@ -437,38 +437,38 @@ None — no schema changes.
 
 #### Automated
 
-- [x] 1.1 `npx vitest run` passes, including all `src/lib/units.test.ts` cases
-- [x] 1.2 `npm run test` (new script) runs the suite successfully
-- [x] 1.3 `npm run lint` passes
+- [x] 1.1 `npx vitest run` passes, including all `src/lib/units.test.ts` cases — b3968fa
+- [x] 1.2 `npm run test` (new script) runs the suite successfully — b3968fa
+- [x] 1.3 `npm run lint` passes — b3968fa
 - [x] 1.4 `npx astro build` typechecks and builds cleanly (with
-      `SUPABASE_URL`/`SUPABASE_KEY` set per `CLAUDE.md`)
+      `SUPABASE_URL`/`SUPABASE_KEY` set per `CLAUDE.md`) — b3968fa
 
 #### Manual
 
-- [x] 1.5 A CI run (after push) shows the new `npm run test` step passing
+- [x] 1.5 A CI run (after push) shows the new `npm run test` step passing — b3968fa
 - [x] 1.6 `npx vitest run --reporter=verbose` output reviewed to confirm test
-      names clearly describe each conversion scenario
+      names clearly describe each conversion scenario — b3968fa
 
 ### Phase 2: Close the Risk #6 product-edit validation gap
 
 #### Automated
 
-- [ ] 2.1 `npm run test` passes, including new `validation.test.ts` and
+- [x] 2.1 `npm run test` passes, including new `validation.test.ts` and
       updated `units.test.ts`
-- [ ] 2.2 `npm run lint` passes
-- [ ] 2.3 `npx astro build` typechecks and builds cleanly
+- [x] 2.2 `npm run lint` passes
+- [x] 2.3 `npx astro build` typechecks and builds cleanly
 
 #### Manual
 
-- [ ] 2.4 Edit a product and submit a negative quantity → 400, no DB write,
+- [x] 2.4 Edit a product and submit a negative quantity → 400, no DB write,
       error surfaced
-- [ ] 2.5 Edit a product and submit `quantity = 0` or `min_threshold = 0` →
+- [x] 2.5 Edit a product and submit `quantity = 0` or `min_threshold = 0` →
       400
-- [ ] 2.6 Edit a product and submit an unrecognized unit while also changing
+- [x] 2.6 Edit a product and submit an unrecognized unit while also changing
       another field → 422, no DB write
-- [ ] 2.7 Edit a product without changing an already-non-`UNIT_MAP` unit →
+- [x] 2.7 Edit a product without changing an already-non-`UNIT_MAP` unit →
       succeeds (204)
-- [ ] 2.8 Edit a product changing its unit to a recognized different unit →
+- [x] 2.8 Edit a product changing its unit to a recognized different unit →
       succeeds (204)
 
 ### Phase 3: Update the test-plan cookbook

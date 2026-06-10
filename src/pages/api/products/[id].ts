@@ -1,5 +1,6 @@
 import type { APIRoute } from "astro";
 import { createClient } from "@/lib/supabase";
+import { validateProductInput } from "@/lib/validation";
 
 // PUT and DELETE are called via fetch() from client-side components (F1 fix:
 // HTML forms cannot issue PUT/DELETE). These handlers return HTTP status codes
@@ -28,6 +29,28 @@ export const PUT: APIRoute = async (context) => {
   const expiryDate = ((form.get("expiry_date") ?? "") as string) || null;
   const minThreshold = parseFloat((form.get("min_threshold") ?? "0") as string);
   const addToList = form.has("add_to_list");
+
+  const currentResult = await supabase
+    .from("products")
+    .select("unit")
+    .eq("id", id)
+    .eq("user_id", user.id)
+    .maybeSingle();
+
+  if (currentResult.error) {
+    return new Response(encodeURIComponent(currentResult.error.message), { status: 500 });
+  }
+
+  const validation = validateProductInput({
+    quantity,
+    unit,
+    minThreshold,
+    currentUnit: String(currentResult.data?.unit ?? ""),
+  });
+
+  if (!validation.ok) {
+    return new Response(validation.message, { status: validation.status });
+  }
 
   const { error } = await supabase
     .from("products")

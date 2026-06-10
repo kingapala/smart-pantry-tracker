@@ -91,6 +91,11 @@ export function convertUnit(value: number, fromUnit: string, toUnit: string): nu
   return (value * fromInfo.factor) / toInfo.factor;
 }
 
+/** Whether `unit` is recognized by the conversion table. */
+export function isKnownUnit(unit: string): boolean {
+  return unit.toLowerCase().trim() in UNIT_MAP;
+}
+
 /** Whether two units belong to the same convertible category. */
 export function unitsCompatible(unitA: string, unitB: string): boolean {
   const a = unitA.toLowerCase().trim();

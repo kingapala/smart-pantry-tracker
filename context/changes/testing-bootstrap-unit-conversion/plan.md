@@ -454,9 +454,9 @@ None — no schema changes.
 #### Automated
 
 - [x] 2.1 `npm run test` passes, including new `validation.test.ts` and
-      updated `units.test.ts`
-- [x] 2.2 `npm run lint` passes
-- [x] 2.3 `npx astro build` typechecks and builds cleanly
+      updated `units.test.ts` — c654dc1
+- [x] 2.2 `npm run lint` passes — c654dc1
+- [x] 2.3 `npx astro build` typechecks and builds cleanly — c654dc1
 
 #### Manual
 
@@ -475,10 +475,10 @@ None — no schema changes.
 
 #### Automated
 
-- [ ] 3.1 `npx prettier --write context/foundation/test-plan.md` produces no
+- [x] 3.1 `npx prettier --write context/foundation/test-plan.md` produces no
       diff beyond the intended §6.1/§6.5 edits
 
 #### Manual
 
-- [ ] 3.2 §6.1 and §6.5 read coherently alongside §6's remaining "TBD"
+- [x] 3.2 §6.1 and §6.5 read coherently alongside §6's remaining "TBD"
       placeholders for later phases

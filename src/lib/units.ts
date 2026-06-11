@@ -106,3 +106,7 @@ export function unitsCompatible(unitA: string, unitB: string): boolean {
   if (!infoA || !infoB) return false;
   return infoA.category === infoB.category;
 }
+
+export function roundTo2(value: number): number {
+  return Math.round(value * 100) / 100;
+}

@@ -1,7 +1,7 @@
 ---
 change_id: testing-bootstrap-unit-conversion
 title: Bootstrap test runner and unit-conversion correctness
-status: implemented
+status: impl_reviewed
 created: 2026-06-10
 updated: 2026-06-10
 archived_at: null

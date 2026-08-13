@@ -3,7 +3,7 @@ change_id: checkoff-unit-conversion-integration
 title: Integration tests for cross-unit checkoff conversion (Risk #1)
 status: implementing
 created: 2026-06-12
-updated: 2026-06-12
+updated: 2026-06-15
 archived_at: null
 ---
 

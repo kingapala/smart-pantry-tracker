@@ -195,24 +195,24 @@ None — test-only change, no schema or data migrations.
 
 #### Automated
 
-- [x] 1.1 New test file passes: `npx vitest run src/pages/api/shopping-list-items/[id]/checkoff.test.ts` (3 tests pass)
-- [x] 1.2 Full suite passes: `npm run test` (33 total)
-- [x] 1.3 Lint passes: `npm run lint`
-- [x] 1.4 Typecheck passes: `npx astro check`
+- [x] 1.1 New test file passes: `npx vitest run src/pages/api/shopping-list-items/[id]/checkoff.test.ts` (3 tests pass) — 2001f6c
+- [x] 1.2 Full suite passes: `npm run test` (33 total) — 2001f6c
+- [x] 1.3 Lint passes: `npm run lint` — 2001f6c
+- [x] 1.4 Typecheck passes: `npx astro check` — 2001f6c
 
 #### Manual
 
-- [x] 1.5 Deliberate-break check on the cross-unit case confirms the test fails when conversion application is broken, then revert
+- [x] 1.5 Deliberate-break check on the cross-unit case confirms the test fails when conversion application is broken, then revert — 2001f6c
 
 ### Phase 2: products/[id]/checkoff.ts
 
 #### Automated
 
-- [ ] 2.1 New test file passes: `npx vitest run src/pages/api/products/[id]/checkoff.test.ts` (2 tests pass)
-- [ ] 2.2 Full suite passes: `npm run test` (35 total)
-- [ ] 2.3 Lint passes: `npm run lint`
-- [ ] 2.4 Typecheck passes: `npx astro check`
+- [x] 2.1 New test file passes: `npx vitest run src/pages/api/products/[id]/checkoff.test.ts` (2 tests pass)
+- [x] 2.2 Full suite passes: `npm run test` (35 total)
+- [x] 2.3 Lint passes: `npm run lint`
+- [x] 2.4 Typecheck passes: `npx astro check`
 
 #### Manual
 
-- [ ] 2.5 Confirm `src/lib/test/fake-supabase.ts` required zero changes to support this route
+- [x] 2.5 Confirm `src/lib/test/fake-supabase.ts` required zero changes to support this route

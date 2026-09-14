@@ -8,7 +8,14 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: "html",
   use: {
+    baseURL: "http://localhost:4321",
     trace: "on-first-retry",
+  },
+  webServer: {
+    command: "npm run dev",
+    url: "http://localhost:4321",
+    timeout: 120000,
+    reuseExistingServer: !process.env.CI,
   },
 
   projects: [
@@ -25,12 +32,6 @@ export default defineConfig({
     {
       name: "webkit",
       use: { ...devices["Desktop Safari"] },
-    },
-    { name: "setup", testMatch: /auth\.setup\.ts/ },
-    {
-      name: "chromium",
-      use: { storageState: "playwright/.auth/user.json" },
-      dependencies: ["setup"],
     },
   ],
 });
